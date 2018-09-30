@@ -1,0 +1,19 @@
+function tile(index){
+  this.x;
+  this.y;
+  this.index=index;
+  this.generate=function(){
+    this.slash=random(0,1)<chance/100;
+  }
+  this.show=function(){
+    this.x=index%numTiles;
+    this.y=floor(index/numTiles);
+    stroke(strk);
+    if(this.slash){
+      line(this.x*sizeT,this.y*sizeT,(this.x+1)*sizeT,(this.y+1)*sizeT);
+    }
+    else{
+      line((this.x+1)*sizeT,this.y*sizeT,this.x*sizeT,(this.y+1)*sizeT);
+    }
+  }
+}

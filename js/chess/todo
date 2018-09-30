@@ -1,0 +1,42 @@
+todo:
+  chess:
+    check/checkmate (win/loss statement) //rules
+    //double check ambiguity elimination
+    three fold repetition
+    random chess
+    possibly:
+      allow console command interpretation of notation//different input
+
+
+  sudoku:
+    x/xy/xyz-wing
+    Hidden Pair/Triplet/Quad
+    Swordfish
+    refactoring (eliminate cycles)
+
+  Encryption/messaging:
+    asymectric(RSA)
+    Diffie-Hellman
+
+  neural network:
+    back-propagation
+    library modification
+
+  network updating:
+    simulated messaging
+    hacker prevention(fake updates/dos)
+    addition and removal of nodes:
+      packet drop
+
+  tetris:
+
+  menace tic-tac-toe:
+
+  rasbPi videoSense:
+    pihole
+    home sweet
+    car control
+    pid control
+    neural net?
+  freeboard/jinx:
+  pros:
