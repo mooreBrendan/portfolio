@@ -25,6 +25,7 @@ int main(int argc, char **argv){
 		testCount++;
 	}
 
+	head = sortTests(head);
 	//loop through values
 	int curr;
 	Test* messHead;
@@ -82,29 +83,51 @@ Test* gentest(int val, char* text){
 	testCase-> testVal = val;
 	testCase->next = NULL;
 	testCase->messNext = NULL;
-	/*
-	//find length of text
-	char* temp = text;
-	int messLength = 0;
-	while(temp != NULL && temp != "\n"){
-		temp++;
-		messLength++;
-	}
-	//duplicate
-	testCase-> testMess = malloc(sizeof(char)* messLength);
-	if(testCase-> testMess ==NULL){
-		return;
-	}
-	int i;
-	for(i=0; i< messLength;i++){
-		testCase->testMess[i] = text[i];
-	}
-
-	//assign mess length
-	testCase->messLength = messLength;
-	*/
 	testCase->testMess = text;
 	return(testCase);
+}
+
+Test* sortTests(Test* sortedHead){
+	if(sortedHead == NULL){
+		return(NULL);
+	}
+	Test* unsortHead = sortedHead -> next;
+	sortedHead -> next = NULL;
+
+	Test* temp;
+	Test* prev;
+	while(unsortHead != NULL){
+		prev = NULL;
+		temp = sortedHead;
+		while(temp != NULL){
+			if(temp -> testVal < unsortHead -> testVal){
+				prev = temp;
+				temp = temp -> next;
+			}
+			else{ //insert
+				if(prev == NULL){
+					prev = unsortHead;
+					unsortHead = unsortHead -> next;
+					prev -> next = sortedHead;
+					sortedHead = prev;
+				}
+				else{
+					//merge
+					prev-> next = unsortHead;
+					unsortHead = unsortHead -> next;
+					prev -> next -> next = temp;
+				}
+					temp = NULL;
+					prev = NULL;
+			}
+		}
+		if(prev != NULL){
+			prev -> next = unsortHead;
+			unsortHead = unsortHead -> next;
+			prev -> next -> next = NULL;
+		}
+	}
+	return(sortedHead);
 }
 
 Test* runTest(int val, Test* testCase){

@@ -6,7 +6,10 @@ typedef struct testNode{
 	struct testNode* messNext;
 }Test;
 
+
 Test* gentest(int, char*);
+
+Test* sortTests(Test*);
 
 Test* runTest(int, Test*);
 
