@@ -7,7 +7,7 @@ GCC = gcc -std=c99 -g $(WARNING) $(ERROR)
 
 TESTFLAGS = -DTEST_MAIN
 
-SRCS = fbz.c
+SRCS = fbz.c mSort.c
 
 OBJS = $(SRCS:%.c=%.o)
 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "fbz.h"
+#include "mSort.h"
 
 int main(int argc, char **argv){
 	if (argc < 3){
@@ -25,7 +26,8 @@ int main(int argc, char **argv){
 		testCount++;
 	}
 
-	head = sortTests(head);
+	//head = sortTests(head);
+	mSort(&head);
 	//loop through values
 	int curr;
 	Test* messHead;
