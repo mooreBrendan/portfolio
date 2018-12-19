@@ -5,7 +5,7 @@ WARNING = -Wall -Wshadow --pedantic
 ERROR = -Wvla -Werror
 GCC = gcc -std=c99 -g $(WARNING) $(ERROR)
 
-TESTFLAGS = -DTEST_MAIN
+TESTFLAGS = -DTEST_MAIN -DCHECKING
 
 SRCS = main.c quickSort.c
 

@@ -12,6 +12,16 @@ int comparison(const void* x, const void* y){
 	return(*x1 > *y1);
 }
 
+#ifdef CHECKING 
+void check(const int* a, const int length){
+	int i;
+	for(i = 0; i < length - 1; i++){
+		if(a[i] > a[i + 1]){
+			printf("failed sorting: %d\t%d", a[i], a[i+1]);
+		}
+	}
+}
+#endif
 int main(int argc, char** argv){
 	//init
 	if(argc < 3){
@@ -45,7 +55,9 @@ int main(int argc, char** argv){
 	}
 	//sort
 	quickSort(arr, count, comparison);
-
+#ifdef CHECKING
+	check(arr, count);
+#endif
 	//print
 	for(temp = 0; temp < count; temp++){
 		fprintf(fOut, "%d\n", arr[temp]);
