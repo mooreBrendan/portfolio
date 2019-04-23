@@ -1,6 +1,32 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "steg.h"
+#include "bmp.h"
+
+//HW10
+void decode(char* inPic, char* outMess){
+	/*BMPImage* fIn = BMP_Open(inPic);
+	if(Is_BMPHeader_Valid(fIn ->header, fIn)){
+		return;
+	}
+	FILE* fOut = fopen(outMess, "w");
+	if(fOut == NULL){
+		BMP_free(fIn);
+		return;
+	}
+
+	char temp;
+	do{
+		temp = read(randPixel());
+		temp = convertFromChar(temp);
+	}while(temp != 0);
+	*/
+}
+
+void encode(char* inPic, char* inMess, char* outPic){
+
+}
+
 
 char convertFromChar(char in){
 	char out;
@@ -16,7 +42,7 @@ char convertFromChar(char in){
 	}else{
 		out = 0;
 	}
-	return(out;
+	return(out);
 }
 
 char convertToChar(char in){

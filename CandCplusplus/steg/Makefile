@@ -1,13 +1,13 @@
 # Makefile
 
-TARGET = pa6
+TARGET = steg
 WARNING = -Wall -Wshadow --pedantic
 ERROR = -Wvla #-Werror
 GCC = gcc -std=c99 -g $(WARNING) $(ERROR)
 
 TESTFLAGS = #-DTESTING #-DPRINTING 
 
-SRCS = pa6.c seqpair.c
+SRCS = main.c steg.c hash.c
 OBJS = $(SRCS:%.c=%.o)
 
 
