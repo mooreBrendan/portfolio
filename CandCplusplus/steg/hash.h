@@ -5,4 +5,6 @@ unsigned int promptPassword();
 
 unsigned int passHash(char*, int);
 
+int getch();
+
 #endif
