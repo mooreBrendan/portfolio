@@ -9,24 +9,30 @@
 
 unsigned int promptPassword(){
 	char pass[STRING_SIZE + 4];
-	int i =3;
-	/*for(i = 0; i< STRING_SIZE; i++){
+	int i;
+	for(i = 3; i< STRING_SIZE +4; i++){
 		pass[i] = i; //initialize string
-	}*/
+	}
 	printf("Enter Password:\n");
 	pass[0] = 'e';
 	pass[1] = 9;
 	pass[2] = 10;
+	i = 3;
 	while(i < STRING_SIZE){
 		pass[i] = getch();
-		if(pass[i] < 32){
+		printf("%d ", pass[i]);
+		if(pass[i] == 127){ //backspace
+			if(i > 3){
+				pass[i] = i;
+				i--;
+			}
+		}else	if(pass[i] == 10){ //enter
 			i = STRING_SIZE;
-		}else{
+		}else{ //increment
 			i++;
 		}
 	}
-	pass[STRING_SIZE] = '\0';
-	//fgets(pass, sizeof(pass), stdin);
+	//pass[STRING_SIZE] = '\0';
 	//return seed from hash
 	return(passHash(pass, STRING_SIZE));
 }
