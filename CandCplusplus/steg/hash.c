@@ -38,7 +38,7 @@ unsigned int passHash(char* pass, int size){
 	unsigned int tempI = 0;
 	char tempC = 0;
 	for( i = 0; i< size  - 3; i+=4){
-		tempC += (pass[i] ^ pass[i+2]) + (pass[i+3] ^ pass[i+1]);
+		tempC += ((pass[i] ^ pass[i+2]) + (pass[i+3])) ^ pass[i+1];
 		tempI = tempC;
 		hash += tempI << 8 * j;
 		j = (j + 1) % sizeof(unsigned int);
