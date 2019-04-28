@@ -5,28 +5,54 @@
 
 //HW10
 void decode(char* inPic, char* outMess){
-	/*BMPImage* fIn = BMP_Open(inPic);
-	if(Is_BMPHeader_Valid(fIn ->header, fIn)){
+	BMPImage* fIN = BMP_Open(inPic);
+	if(fIN == NULL){
 		return;
 	}
-	FILE* fOut = fopen(outMess, "w");
-	if(fOut == NULL){
-		BMP_free(fIn);
+	FILE* fOUT = fopen(outMess, "w");
+	if(fOUT == NULL){
+		BMP_Free(fIN);
 		return;
 	}
-
 	char temp;
 	do{
-		temp = read(randPixel());
-		temp = convertFromChar(temp);
+		temp = readPixel(fIN, randPixel(fIN));
+		temp = convertToChar(temp);
+		if(temp != 0){
+			fprintf(fOUT, "%c", temp);
+		}
 	}while(temp != 0);
-	*/
+	BMP_Free(fIN);
+	fclose(fOUT);
 }
 
 void encode(char* inPic, char* inMess, char* outPic){
+	BMPImage* fIN = BMP_Open(inPic);
+	if(fIN == NULL){
+		return;
+	}
+	FILE* fMESS = fopen(inMess, "r");
+	BMPImage* imageOut= malloc(sizeof(BMPImage));
+	if(imageOut == NULL){
+		BMP_Free(fIN);
+		return;
+	}
+	imageOut->header = fIN->header;
+	imageOut->data = malloc(sizeof(unsigned char)* (imageOut->header).imagesize);
+	
+	copyData(fIN, imageOut);
+	BMP_Free(fIN);
 
+	char temp;
+	while(!feof(fMESS)){
+		fscanf(fMESS, "%c", &temp);
+		temp = convertFromChar(temp);
+		writePixel(temp, randPixel(imageOut), imageOut);
+	}
+	BMP_Write(outPic, imageOut);
+	BMP_Free(imageOut);
+	fclose(fMESS);
 }
-
 
 char convertFromChar(char in){
 	char out;

@@ -2,7 +2,6 @@
 
 
 int Is_BMPHeader_Valid(BMPHeader* header, FILE *fptr) {
-  int valid=1;
   if(header->offset != BMP_HEADER_SIZE) {
     return(0);
   }
@@ -119,7 +118,7 @@ int BMP_Write(const char * outfile, BMPImage* image)
     return(EXIT_FAILURE);
   }
   fclose(fptr);
-  return TRUE;
+  return 1;
 }
 
 void BMP_Free(BMPImage* image) {
@@ -132,5 +131,42 @@ void BMP_Free(BMPImage* image) {
     }
     free(image);
   }
+}
+
+
+//*************PIXEL*MANIPULATION**************
+int randPixel(BMPImage* image){ //return a random pixel
+	int height = rand() % (image ->header).height;
+	int width = rand() % (image ->header).width;
+	return(height* width * 3);
+}
+
+char readPixel(BMPImage* image, int read){ //read in the pixel
+	char out = 0;
+	char temp = 0;
+	int i;
+	for( i = 2; i >= 0; i--){
+		temp = image->data[read+(2-i)];
+		temp = temp % 4; //get last 2 bits
+		out = out | (temp << (i *2 + 1));
+	}
+	return(out);
+}
+
+void copyData(BMPImage* inImage, BMPImage* outImage){
+	int i;
+	for(i = 0; i< 3 *(inImage->header).height * (inImage->header).width; i++){
+		outImage->data[i] = inImage->data[i];
+	}
+}
+
+void writePixel(char inChar, int read, BMPImage* outImage){ //write to the pixel
+	int i;
+	char temp;
+	for(i = 2; i>=0;i--){
+		temp = ((3<<(2*i)) & inChar)>>(2*i); //get 2 bits of the in char
+		outImage->data[read+(2-i)] -= outImage->data[read+(2-i)] % 4; //remove last 2 bits
+		outImage->data[read+(2-i)] = outImage->data[read+(2-i)] | temp; //copy in last 2 bits
+	}
 }
 

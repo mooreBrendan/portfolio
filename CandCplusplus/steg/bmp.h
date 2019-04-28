@@ -53,4 +53,13 @@ int BMP_Write(const char * outfile, BMPImage *image);
 void BMP_Free(BMPImage *image);
 
 
+//**************EXTRA*****************
+int randPixel(BMPImage*);
+
+char readPixel(BMPImage*, int);
+
+void copyData(BMPImage*, BMPImage*);
+
+void writePixel(char, int, BMPImage*);
+
 #endif

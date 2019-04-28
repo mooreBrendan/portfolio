@@ -13,14 +13,14 @@ unsigned int promptPassword(){
 	for(i = 3; i< STRING_SIZE +4; i++){
 		pass[i] = i; //initialize string
 	}
-	printf("Enter Password:\n");
+	printf("Enter Password: ");
 	pass[0] = 'e';
 	pass[1] = 9;
 	pass[2] = 10;
 	i = 3;
 	while(i < STRING_SIZE){
 		pass[i] = getch();
-		printf("%d ", pass[i]);
+		//printf("%d ", pass[i]);
 		if(pass[i] == 127){ //backspace
 			if(i > 3){
 				pass[i] = i;
@@ -32,7 +32,8 @@ unsigned int promptPassword(){
 			i++;
 		}
 	}
-	//pass[STRING_SIZE] = '\0';
+	printf("\n");
+	pass[STRING_SIZE] = '\0';
 	//return seed from hash
 	return(passHash(pass, STRING_SIZE));
 }
