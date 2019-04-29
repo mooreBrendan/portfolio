@@ -28,11 +28,15 @@ static void infMonkey(char* strng, int count, int size){
 		return;
 	}
 	if(count + 1 == size){
+		strng[count] = 32;
+		printArray(strng, size);
 		for(i = 0; i< 26;i++){
 			strng[count] = 65+ i;
 			printArray(strng, size);
 		}
 	}else{
+		strng[count] = 32;
+		infMonkey(strng, count +1, size);
 		for(i = 0; i< 26; i++){
 			strng[count] = 65 + i;
 			infMonkey(strng, count + 1, size);
