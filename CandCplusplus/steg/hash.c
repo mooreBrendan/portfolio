@@ -3,8 +3,6 @@
 #include <unistd.h>
 #include <termios.h>
 
-#define STRING_SIZE 20
-
 static unsigned int passHash(char*, int);
 static int getch();
 
