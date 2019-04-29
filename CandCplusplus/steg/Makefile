@@ -7,7 +7,7 @@ GCC = gcc -std=c99 -g $(WARNING) $(ERROR)
 
 TESTFLAGS = #-DTESTING #-DPRINTING 
 
-SRCS = main.c steg.c bmp.c hash.c
+SRCS = main.c input.c steg.c bmp.c hash.c
 OBJS = $(SRCS:%.c=%.o)
 
 

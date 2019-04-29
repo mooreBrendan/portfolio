@@ -49,6 +49,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 		temp = convertFromChar(temp);
 		writePixel(temp, randPixel(imageOut), imageOut);
 	}
+	writePixel(0, randPixel(imageOut), imageOut);
 	BMP_Write(outPic, imageOut);
 	BMP_Free(imageOut);
 	fclose(fMESS);
