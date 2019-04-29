@@ -49,7 +49,10 @@ BMPImage *BMP_Open(const char *filename) {
   //open file
   //read file
   FILE *fptr = fopen(filename,"r");
-	
+	if(fptr == NULL){
+		return(NULL);
+	}
+
   //Allocate memory for BMPImage*;
   BMPImage *bmpImage = (BMPImage *)malloc(sizeof(BMPImage));
   
@@ -68,17 +71,23 @@ BMPImage *BMP_Open(const char *filename) {
   if(read_size < 54)
   {
     fclose(fptr);
+		free(bmpImage);
     return(NULL);
   }
   //check if the header is valid
 
-  Is_BMPHeader_Valid(&(bmpImage->header), fptr);
+  if(!Is_BMPHeader_Valid(&(bmpImage->header), fptr)){	
+    fclose(fptr);
+		free(bmpImage);
+		return(NULL);
+	}
   
   int size = sizeof(unsigned char)*((int)(bmpImage->header).imagesize);
   bmpImage->data = (unsigned char*)malloc(size);
   if(bmpImage->data==NULL)
   {
     fclose(fptr);
+		free(bmpImage);
     return(NULL);
   }
   // read in the image data
@@ -87,6 +96,7 @@ BMPImage *BMP_Open(const char *filename) {
   //check for error	
   if(read_length != 1)
   {
+		free(bmpImage);
     return(NULL);
   }
   //free(bmpImage->data);
