@@ -1,0 +1,7 @@
+This program simulates how ants are able to maintain balance of current tasks.  The ants keep track of the pheremones that correspond to
+each task and count how many of each they pass by.  If they notice a smaller ammount of some workers, they will switch to performing that
+task.  This allows the ants to keep a balance of workers so that even if a large amount of ants are taken out, without the ants having to
+know the total number of ants performing each task.  This program simulates this by having dots of different types/colors moving arround
+randomly.  The dots keep track of the ants that pass with in their perception radius and will change type if the number is outside of
+tolerance.  This program has functions to change all ants of one type to another or to remove ants in a given area.  This will allow the
+program to demonstrate the balancing ability of the ants population.
