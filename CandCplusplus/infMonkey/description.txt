@@ -1,0 +1,2 @@
+This program is used to simulate the 'infinite monkeys' principle, by having the program printout all possible combinations of letters of
+the given length.  If this program was given infinite time, it would eventually print out every book that will ever have been written.
