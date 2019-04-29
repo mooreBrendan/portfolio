@@ -1,11 +1,12 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "main.h"
+
 #include <unistd.h>
 #include <termios.h>
-#include <string.h>
-#include "hash.h"
 
 #define STRING_SIZE 20
+
+static unsigned int passHash(char*, int);
+static int getch();
 
 unsigned int promptPassword(){
 	char pass[STRING_SIZE + 4];
@@ -14,11 +15,15 @@ unsigned int promptPassword(){
 		pass[i] = i; //initialize string
 	}
 	printf("Enter Password: ");
+	
+	//just give some basic variables to give some interesting behaviour
 	pass[0] = 'e';
 	pass[1] = 9;
 	pass[2] = 10;
+
+	//get password
 	i = 3;
-	while(i < STRING_SIZE){
+	while(i < STRING_SIZE+3){
 		pass[i] = getch();
 		//printf("%d ", pass[i]);
 		if(pass[i] == 127){ //backspace
@@ -32,13 +37,16 @@ unsigned int promptPassword(){
 			i++;
 		}
 	}
+
 	printf("\n");
-	pass[STRING_SIZE] = '\0';
+	
+	pass[STRING_SIZE+3] = '\0';//end string
+
 	//return seed from hash
 	return(passHash(pass, STRING_SIZE));
 }
 
-unsigned int passHash(char* pass, int size){
+static unsigned int passHash(char* pass, int size){
   int i;
 	int j=0;
 	unsigned int hash = 0;
@@ -53,7 +61,7 @@ unsigned int passHash(char* pass, int size){
 	return(hash);
 }
 
-int getch(){
+static int getch(){
 	struct termios oldt, newt;
 	int ch;
 	tcgetattr(STDIN_FILENO, &oldt);

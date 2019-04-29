@@ -1,9 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "steg.h"
-#include "bmp.h"
+#include "main.h"
 
-//HW10
+
+static char convertFromChar(char);
+
+static char convertToChar(char);
+
 void decode(char* inPic, char* outMess){
 	BMPImage* fIN = BMP_Open(inPic);
 	if(fIN == NULL){
@@ -41,7 +42,6 @@ void encode(char* inPic, char* inMess, char* outPic){
 	imageOut->data = malloc(sizeof(unsigned char)* (imageOut->header).imagesize);
 	
 	copyData(fIN, imageOut);
-	BMP_Free(fIN);
 
 	char temp;
 	while(!feof(fMESS)){
@@ -51,11 +51,12 @@ void encode(char* inPic, char* inMess, char* outPic){
 	}
 	writePixel(0, randPixel(imageOut), imageOut);
 	BMP_Write(outPic, imageOut);
+	BMP_Free(fIN);
 	BMP_Free(imageOut);
 	fclose(fMESS);
 }
 
-char convertFromChar(char in){
+static char convertFromChar(char in){
 	char out;
 	if(in >= 32 ){
 		if(in <91){
@@ -72,7 +73,7 @@ char convertFromChar(char in){
 	return(out);
 }
 
-char convertToChar(char in){
+static char convertToChar(char in){
 	char out;
 	if(in == 0){
 		out = 0;

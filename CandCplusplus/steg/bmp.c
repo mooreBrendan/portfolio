@@ -1,7 +1,6 @@
-#include "bmp.h"
+#include "main.h"
 
-
-int Is_BMPHeader_Valid(BMPHeader* header, FILE *fptr) {
+static int Is_BMPHeader_Valid(BMPHeader* header, FILE *fptr) {
   if(header->offset != BMP_HEADER_SIZE) {
     return(0);
   }

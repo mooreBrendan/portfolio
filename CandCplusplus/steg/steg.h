@@ -7,8 +7,4 @@ void decode(char*, char*);
 
 void encode(char*, char*, char*);
 
-char convertFromChar(char);
-
-char convertToChar(char);
-
 #endif

@@ -45,7 +45,7 @@ BMPImage *BMP_Open(const char *filename);
 
 
 
-int Is_BMPHeader_Valid(BMPHeader *bmp_hdr, FILE *fptr);
+//int Is_BMPHeader_Valid(BMPHeader *bmp_hdr, FILE *fptr);
 
 int BMP_Write(const char * outfile, BMPImage *image);
 
