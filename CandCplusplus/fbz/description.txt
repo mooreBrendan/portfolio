@@ -1,0 +1,5 @@
+This is my implementation of the 'fizz-buzz' coding interview challenge.  For my program, I focused on making it as easy to customize as
+possible.  The program is called and the first 2 arguments are the start and end indexes.  After that, the arguments are taken in sets of
+two, where the first is the multiple that is to be checked and the second is the statement that should be printed if true.  This program
+uses a sorted linked list to store the test statements so that if the program is given enough memmory, it can test against infinite
+testcases.

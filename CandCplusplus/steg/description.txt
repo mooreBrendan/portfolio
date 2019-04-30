@@ -1,0 +1,3 @@
+This program will take a message that the user wants to be hidden, and hides it in a given bmp image.  This program hides the message in
+the 2 least significant bits of the R, G, and B pixels that are pseudo-randomly determined by the password.  The program has a --help 
+statement for proper use and --security statement for information about the security of this program.
