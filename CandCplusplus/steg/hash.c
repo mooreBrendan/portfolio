@@ -30,7 +30,7 @@ unsigned int promptPassword(){
 				i--;
 			}
 		}else	if(pass[i] == 10){ //enter
-			i = STRING_SIZE;
+			i = STRING_SIZE + 3;
 		}else{ //increment
 			i++;
 		}

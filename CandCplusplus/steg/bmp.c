@@ -147,7 +147,7 @@ void BMP_Free(BMPImage* image) {
 int randPixel(BMPImage* image){ //return a random pixel
 	int height = rand() % (image ->header).height;
 	int width = rand() % (image ->header).width;
-	return(height* width * 3);
+	return(((height* (image->header).width) + width) * 3);
 }
 
 char readPixel(BMPImage* image, int read){ //read in the pixel
@@ -173,7 +173,10 @@ void writePixel(char inChar, int read, BMPImage* outImage){ //write to the pixel
 	int i;
 	char temp;
 	for(i = 2; i>=0;i--){
-		temp = ((3<<(2*i)) & inChar)>>(2*i); //get 2 bits of the in char
+		temp = 3 << (2*i); //create 2 bit mask at position
+		temp &= inChar; //match bits
+		temp >>= (2*i);//shift bits to least significant position
+
 		outImage->data[read+(2-i)] -= outImage->data[read+(2-i)] % 4; //remove last 2 bits
 		outImage->data[read+(2-i)] = outImage->data[read+(2-i)] | temp; //copy in last 2 bits
 	}

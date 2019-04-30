@@ -19,9 +19,6 @@ int main(int argc, char** argv){
 	return(EXIT_SUCCESS);
 }
 
-
-
-
 static void infMonkey(char* strng, int count, int size){
 	int i;
 	if(count >= size || count < 0 || size <= 0){
@@ -42,8 +39,6 @@ static void infMonkey(char* strng, int count, int size){
 			infMonkey(strng, count + 1, size);
 		}
 	}
-
-
 }
 
 static void printArray(char* strng, int size){
