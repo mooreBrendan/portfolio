@@ -58,15 +58,29 @@ static int checkString(char* input, char* check, int length){
 
 static void printHelp(){
 	printf("usage \"./steg $(input image) $(mode) $(message file) $(output image)\"\n\n");
+
 	printf("\tmode:\t-e: encode\n\t\t-d: decode\n\n");
 	printf("\tinput images must be bmp files\n\n");
 	printf("\tmessage file must be a text file\n\n");
 	printf("\tuse \"./steg --security\" to view security statement\n\n");
-	printf("\tpurpose:   This program is intended to hide a message in a bmp image. The\n\tmessage will be hidden in pseudo-random pixels that are determined by the\n\tpassword that is entered.  The password must be less than 20 characters.\n\tWhile the password is being entered, it will be hidden from the screen.\n\tIf an error is made while inputing the password,  the backspace key can be\n\tused.  Additionally, if the password is less than %d characters the enter\n\tkey can be used to terminate input.\n\n", STRING_SIZE);
+	
+	printf("\tpurpose:   This program is intended to hide a message in a bmp image. The\n");
+	printf("\tmessage will be hidden in pseudo-random pixels that are determined by the\n");
+	printf("\tpassword that is entered.  The password must be less than 20 characters.\n");
+	printf("\tWhile the password is being entered, it will be hidden from the screen.\n");
+	printf("\tIf an error is made while inputing the password,  the backspace key can be\n");
+	printf("\tused.  Additionally, if the password is less than %d characters the enter\n", STRING_SIZE);
+	printf("\tkey can be used to terminate input.\n\n");
 }
 
 static void printSecurity(){
-	printf("\tThis program is not intended to be uncrackable.  It is meant to hide the\n\tmessage from attackers, not to protect it.  The ultimate goal is to hide\n\tthe message so that the attacker will not attempt to decode it.  This\n\tprogram does not require an internet connection and does not retain any\n\tinformation.  The password, message, and images are not stored after\n\tthis program exits\n\n");
+	printf("\tThis program is not intended to be uncrackable.  It is meant to hide the\n");
+	printf("\tmessage from attackers, not to protect it.  The ultimate goal is to hide\n");
+	printf("\tthe message so that the attacker will not attempt to decode it.  This\n");
+	printf("\tprogram does not require an internet connection and does not retain any\n");
+	printf("\tinformation.  The password, message, and images are not stored after this\n");
+	printf("\tprogram exits.  If any of this behaviour is noticed, do not use this\n");
+	printf("\tprogram as it has most likely been modified and is not safe.\n\n");
 }
 
 static void printUse(){
