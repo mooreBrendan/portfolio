@@ -144,24 +144,6 @@ void BMP_Free(BMPImage* image) {
 
 
 //*************PIXEL*MANIPULATION**************
-int randPixel(BMPImage* image){ //return a random pixel
-	int height = rand() % (image ->header).height;
-	int width = rand() % (image ->header).width;
-	return(((height* (image->header).width) + width) * 3);
-}
-
-char readPixel(BMPImage* image, int read){ //read in the pixel
-	char out = 0;
-	char temp = 0;
-	int i;
-	for( i = 2; i >= 0; i--){
-		temp = image->data[read+(2-i)];
-		temp = temp % 4; //get last 2 bits
-		out = out | (temp << (i *2 + 1));
-	}
-	return(out);
-}
-
 void copyData(BMPImage* inImage, BMPImage* outImage){
 	int i;
 	for(i = 0; i< 3 *(inImage->header).height * (inImage->header).width; i++){
@@ -169,7 +151,25 @@ void copyData(BMPImage* inImage, BMPImage* outImage){
 	}
 }
 
-void writePixel(char inChar, int read, BMPImage* outImage){ //write to the pixel
+unsigned int randPixel(BMPImage* image){ //return a random pixel
+	unsigned int height = rand() % (image ->header).height;
+	unsigned int width = rand() % (image ->header).width;
+	return(((height* (image->header).width) + width) * 3);
+}
+
+unsigned char readPixel(BMPImage* image, unsigned int read){ //read in the pixel
+	unsigned char out = 0;
+	unsigned char temp = 0;
+	int i;
+	for( i = 2; i >= 0; i--){
+		temp = image->data[read+(2-i)];
+		temp = temp % 4; //get last 2 bits
+		out = out | (temp << (i *2));
+	}
+	return(out);
+}
+
+void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
 	int i;
 	char temp;
 	for(i = 2; i>=0;i--){

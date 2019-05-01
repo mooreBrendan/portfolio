@@ -1,9 +1,8 @@
 #include "main.h"
 
+static unsigned char convertFromChar(unsigned char);
 
-static char convertFromChar(char);
-
-static char convertToChar(char);
+static unsigned char convertToChar(unsigned char);
 
 void decode(char* inPic, char* outMess){
 	BMPImage* fIN = BMP_Open(inPic);
@@ -15,7 +14,7 @@ void decode(char* inPic, char* outMess){
 		BMP_Free(fIN);
 		return;
 	}
-	char temp;
+	unsigned char temp;
 	do{
 		temp = readPixel(fIN, randPixel(fIN));
 		temp = convertToChar(temp);
@@ -43,7 +42,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 	
 	copyData(fIN, imageOut);
 
-	char temp;
+	unsigned char temp;
 	while(!feof(fMESS)){
 		fscanf(fMESS, "%c", &temp);
 		temp = convertFromChar(temp);
@@ -55,7 +54,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 	fclose(fMESS);
 }
 
-static char convertFromChar(char in){
+static unsigned char convertFromChar(unsigned char in){
 	char out;
 	if(in >= 32 ){
 		if(in <91){
@@ -72,7 +71,7 @@ static char convertFromChar(char in){
 	return(out);
 }
 
-static char convertToChar(char in){
+static unsigned char convertToChar(unsigned char in){
 	char out;
 	if(in == 0){
 		out = 0;

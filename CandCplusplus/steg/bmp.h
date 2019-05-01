@@ -54,12 +54,12 @@ void BMP_Free(BMPImage *image);
 
 
 //**************EXTRA*****************
-int randPixel(BMPImage*);
-
-char readPixel(BMPImage*, int);
-
 void copyData(BMPImage*, BMPImage*);
 
-void writePixel(char, int, BMPImage*);
+unsigned int randPixel(BMPImage*);
+
+unsigned char readPixel(BMPImage*, unsigned int);
+
+void writePixel(unsigned char, unsigned int, BMPImage*);
 
 #endif
