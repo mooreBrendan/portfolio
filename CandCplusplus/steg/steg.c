@@ -19,7 +19,6 @@ void decode(char* inPic, char* outMess){
 	unsigned char temp;
 	do{
 		temp = readPixel(fIN, randPixel(fIN));
-		temp = convertToChar(temp);
 		if(temp != 0){
 			fprintf(fOUT, "%c", temp);
 		}
@@ -51,21 +50,41 @@ void encode(char* inPic, char* inMess, char* outPic){
 	if(imageOut->data == NULL){
 		BMP_Free(fIN);
 		fclose(fMESS);
-		free(imageOut);
+		BMP_Free(imageOut);
 		return;	
 	}
 	copyData(fIN, imageOut);
 
+	BMP_Free(fIN);
+	unsigned char* pixels = malloc(sizeof(char) * imageOut->header.imagesize);
+	if(pixels == NULL){
+		fclose(fMESS);
+		BMP_Free(imageOut);
+		return;
+	}
+	int i;
+	for(i = 0; i< imageOut->header.imagesize;i++){
+		pixels[i] = 0;
+	}
+
 	unsigned char temp;
+	unsigned int index;
 	while(!feof(fMESS)){
 		fscanf(fMESS, "%c", &temp);
-		temp = convertFromChar(temp);
-		writePixel(temp, randPixel(imageOut), imageOut);
+		index = randPixel(imageOut, pixels);
+		if(index != 0){
+			pixels[index] = 1;
+			writePixel(temp, index, imageOut);
+		}else{
+			printf("could not write\n");
+			fseek(fMESS, 0, SEEK_END);
+		}
 	}
 	BMP_Write(outPic, imageOut);
-	BMP_Free(fIN);
+	//BMP_Free(fIN);
 	BMP_Free(imageOut);
 	fclose(fMESS);
+	free(pixels);
 }
 
 static unsigned char convertFromChar(unsigned char in){

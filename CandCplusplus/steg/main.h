@@ -9,6 +9,6 @@
 
 
 #define STRING_SIZE 20
-
+#define ATTEMPT_LIMIT 50
 
 #endif
