@@ -7,10 +7,12 @@ static unsigned char convertToChar(unsigned char);
 void decode(char* inPic, char* outMess){
 	BMPImage* fIN = BMP_Open(inPic);
 	if(fIN == NULL){
+		printf("Couldn't open input file\n");
 		return;
 	}
 	FILE* fOUT = fopen(outMess, "w");
 	if(fOUT == NULL){
+		printf("couldn't open output file\n");
 		BMP_Free(fIN);
 		return;
 	}
@@ -29,17 +31,29 @@ void decode(char* inPic, char* outMess){
 void encode(char* inPic, char* inMess, char* outPic){
 	BMPImage* fIN = BMP_Open(inPic);
 	if(fIN == NULL){
+		printf("Couldn't open input image\n");
 		return;
 	}
 	FILE* fMESS = fopen(inMess, "r");
+	if(fMESS == NULL){
+		printf("Couldn't open input text\n");
+		BMP_Free(fIN);
+		return;
+	}
 	BMPImage* imageOut= malloc(sizeof(BMPImage));
 	if(imageOut == NULL){
 		BMP_Free(fIN);
+		fclose(fMESS);
 		return;
 	}
 	imageOut->header = fIN->header;
 	imageOut->data = malloc(sizeof(unsigned char)* (imageOut->header).imagesize);
-	
+	if(imageOut->data == NULL){
+		BMP_Free(fIN);
+		fclose(fMESS);
+		free(imageOut);
+		return;	
+	}
 	copyData(fIN, imageOut);
 
 	unsigned char temp;
