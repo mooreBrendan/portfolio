@@ -144,7 +144,6 @@ void BMP_Free(BMPImage* image) {
 
 
 //*************PIXEL*MANIPULATION**************
-
 void copyData(BMPImage* inImage, BMPImage* outImage){
 	int i;
 	for(i = 0; i< 3 *(inImage->header).height * (inImage->header).width; i++){
@@ -152,9 +151,11 @@ void copyData(BMPImage* inImage, BMPImage* outImage){
 	}
 }
 
+
 unsigned int randPixel(BMPImage* image, unsigned char* pixels){ //return a random pixel
 	unsigned int index;
 	int tries = 0;
+	
 	do{
 		tries++;
 		unsigned int height = rand() % (image ->header).height;
@@ -162,7 +163,12 @@ unsigned int randPixel(BMPImage* image, unsigned char* pixels){ //return a rando
 		index = height * (image->header).width + width;
 	}while(pixels[index] != 0 && tries != ATTEMPT_LIMIT);
 	
-	return(tries != ATTEMPT_LIMIT ? index: 0); //return the index if the attempts did not run out
+	if(tries != ATTEMPT_LIMIT){
+		pixels[index] = 1;
+		return(index);	
+	}else{
+		return(0);
+	}
 }
 
 unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char* out){ //read in the pixel
@@ -171,9 +177,9 @@ unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char* out){
 	*out = 0;
 	
 	int i;
-	for( i = 0; i < 3; i++){
+	for( i = 2; i >= 0; i--){
 		temp = mask & image->data[read+i]; //get last 3 bits
-		*out = (*out) | (temp << (i *3)); //move parity bit into position
+		*out |= (temp << ((2-i) *3)); //move parity bit into position
 	}
 	temp >>= 2; //get just parity bit
 	return(temp);//return read status (1: read, 0: didn't read)
@@ -186,7 +192,7 @@ void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //
 	unsigned char blue = 0;
 	getSections(inChar, &red, &green, &blue);
 	for(i = 0; i< 3;i++){
-		outImage->data[read + i] -= (outImage->data[read]) % 8;//remove last 3 bits
+		outImage->data[read + i] -= (outImage->data[read + i]) % 8;//remove last 3 bits
 	}
 	outImage->data[read] += red; //add in each section
 	outImage->data[read+1] += green;

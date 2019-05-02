@@ -6,6 +6,7 @@ static unsigned char convertToChar(unsigned char);
 */
 
 void decode(char* inPic, char* outMess){
+	//initialize files
 	BMPImage* fIN = BMP_Open(inPic);
 	if(fIN == NULL){
 		printf("Couldn't open input file\n");
@@ -18,6 +19,7 @@ void decode(char* inPic, char* outMess){
 		return;
 	}
 	
+	//initialize list of pixels
 	unsigned char* pixels = malloc(sizeof(char) * fIN->header.imagesize);
 	if(pixels == NULL){
 		fclose(fOUT);
@@ -28,22 +30,35 @@ void decode(char* inPic, char* outMess){
 	for(i =0; i< fIN->header.imagesize;i++){
 		pixels[i] = 0;
 	}
+
+	//read image
 	unsigned char temp;
 	unsigned int index;
 	unsigned char readNum;
 	do{
 		index = randPixel(fIN, pixels);
-		readNum = readPixel(fIN, index*3, &temp);
-		if(temp != 0){
-			fprintf(fOUT, "%c", temp);
+		if(index == 0){
+			printf("failed to find available pixel\n");
+			temp = 0;
+		}else{
+			readNum = readPixel(fIN, index*3, &temp);
+			if(readNum != 1){
+				printf("read invalid pixel\n");
+				temp = 0;
+			}else if(temp != 0){
+				fprintf(fOUT, "%c", temp);
+			}
 		}
 	}while(temp != 0);
+	
+	//cleanup
 	free(pixels);
 	BMP_Free(fIN);
 	fclose(fOUT);
 }
 
 void encode(char* inPic, char* inMess, char* outPic){
+	//initialize files
 	BMPImage* fIN = BMP_Open(inPic);
 	if(fIN == NULL){
 		printf("Couldn't open input image\n");
@@ -61,6 +76,8 @@ void encode(char* inPic, char* inMess, char* outPic){
 		fclose(fMESS);
 		return;
 	}
+
+	//initialize output image
 	imageOut->header = fIN->header;
 	imageOut->data = malloc(sizeof(unsigned char)* (imageOut->header).imagesize);
 	if(imageOut->data == NULL){
@@ -71,7 +88,10 @@ void encode(char* inPic, char* inMess, char* outPic){
 	}
 	copyData(fIN, imageOut);
 
+	//remove file that is no longer needed
 	BMP_Free(fIN);
+
+	//initialize list of pixels
 	unsigned char* pixels = malloc(sizeof(char) * imageOut->header.imagesize);
 	if(pixels == NULL){
 		fclose(fMESS);
@@ -83,19 +103,31 @@ void encode(char* inPic, char* inMess, char* outPic){
 		pixels[i] = 0;
 	}
 
+	//write the pixels
 	unsigned char temp;
 	unsigned int index;
 	while(!feof(fMESS)){
 		fscanf(fMESS, "%c", &temp);
-		index = randPixel(imageOut, pixels);
-		if(index != 0){
-			pixels[index] = 1;
-			writePixel(temp, index*3, imageOut);
-		}else{
-			printf("could not write\n");
-			fseek(fMESS, 0, SEEK_END);
+		if(!feof(fMESS)){
+			index = randPixel(imageOut, pixels);
+			if(index != 0){
+				writePixel(temp, index*3, imageOut);
+			}else{
+				printf("could not find new pixel\n");
+				fseek(fMESS, 0, SEEK_END);
+			}
 		}
 	}
+	
+	index = randPixel(imageOut, pixels);
+	if(index != 0){
+		writePixel(0, index*3, imageOut);
+	}else{
+		printf("could not find new pixel\n");
+		fseek(fMESS, 0, SEEK_END);
+	}
+	
+	//clean up
 	BMP_Write(outPic, imageOut);
 	//BMP_Free(fIN);
 	BMP_Free(imageOut);
