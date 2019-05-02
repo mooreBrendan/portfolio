@@ -1,10 +1,18 @@
 #include "main.h"
 
-/*
-static unsigned char convertFromChar(unsigned char);
-static unsigned char convertToChar(unsigned char);
-*/
 
+/********************************************************************
+
+function name: decode
+
+function inputs: 	1) char* inPic: the character string of the name of the input image file
+									2) char* outMess: the character string of the name of the output text file
+
+function purpose: decodes the given image to reveal the hidden message
+
+function return: nothing
+
+********************************************************************/
 void decode(char* inPic, char* outMess){
 	//initialize files
 	BMPImage* fIN = BMP_Open(inPic);
@@ -57,6 +65,20 @@ void decode(char* inPic, char* outMess){
 	fclose(fOUT);
 }
 
+/********************************************************************
+
+function name: encode
+
+function inputs: 	1) char* inPic: the name of the input image file
+									2) char* inMess: the name of the input text file
+									3) char* outPic: the name of the output image file
+
+function purpose: encodes the given text file into the given image and puts it into
+									the output image file
+
+function return: nothing
+
+********************************************************************/
 void encode(char* inPic, char* inMess, char* outPic){
 	//initialize files
 	BMPImage* fIN = BMP_Open(inPic);
@@ -118,7 +140,8 @@ void encode(char* inPic, char* inMess, char* outPic){
 			}
 		}
 	}
-	
+
+	//encode the stop character
 	index = randPixel(imageOut, pixels);
 	if(index != 0){
 		writePixel(0, index*3, imageOut);
@@ -129,35 +152,8 @@ void encode(char* inPic, char* inMess, char* outPic){
 	
 	//clean up
 	BMP_Write(outPic, imageOut);
-	//BMP_Free(fIN);
 	BMP_Free(imageOut);
 	fclose(fMESS);
 	free(pixels);
 }
 
-/*static unsigned char convertFromChar(unsigned char in){
-	char out;
-	if(in >= 32 ){
-		if(in <91){
-			out = 1 + (in - 32);
-		}else	if(in >= 97 && in < 123){
-			out = 34 + (in - 97);
-		}
-		else{
-			out = 0;
-		}
-	}else{
-		out = 0;
-	}
-	return(out);
-}
-
-static unsigned char convertToChar(unsigned char in){
-	char out;
-	if(in == 0){
-		out = 0;
-	}else{
-		out = in + 31;
-	}
-	return(out);
-}*/

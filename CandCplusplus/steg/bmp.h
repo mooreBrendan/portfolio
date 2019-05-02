@@ -62,6 +62,4 @@ unsigned char readPixel(BMPImage*, unsigned int, unsigned char*);
 
 void writePixel(unsigned char, unsigned int, BMPImage*);
 
-void getSections(unsigned char, unsigned char*, unsigned char*, unsigned char*);
-
 #endif

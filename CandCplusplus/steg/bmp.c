@@ -1,5 +1,20 @@
 #include "main.h"
 
+static void getSections(unsigned char, unsigned char*, unsigned char*, unsigned char*);
+
+
+/********************************************************************
+
+function name: Is_BMPHeader_Valid
+
+function inputs: 	1) BMPHeader* header: the bmp header to be checked
+									2) FILE* fptr: the image file for checking
+
+function purpose: checks if the file is a valid bmp image
+
+function return: bool if valid
+
+********************************************************************/
 static int Is_BMPHeader_Valid(BMPHeader* header, FILE *fptr) {
   if(header->offset != BMP_HEADER_SIZE) {
     return(0);
@@ -44,6 +59,17 @@ static int Is_BMPHeader_Valid(BMPHeader* header, FILE *fptr) {
 }
 
 
+/********************************************************************
+
+function name: BMP_Open
+
+function inputs: 	1) char* filename: the input bmp file to be opened
+
+function purpose: opens the bmp file
+
+function return: struct of the bmp image
+
+********************************************************************/
 BMPImage *BMP_Open(const char *filename) {
   //open file
   //read file
@@ -103,6 +129,18 @@ BMPImage *BMP_Open(const char *filename) {
 }
 
 
+/********************************************************************
+
+function name: BMP_Write
+
+function inputs: 	1) char* outfile: the output file to be written to
+									2) BMPImage* image: the image that will be written
+
+function purpose: writes the bmp image to the output file
+
+function return: success value
+
+********************************************************************/
 int BMP_Write(const char * outfile, BMPImage* image)
 {
   //open file and check for error
@@ -130,6 +168,17 @@ int BMP_Write(const char * outfile, BMPImage* image)
   return 1;
 }
 
+/********************************************************************
+
+function name: BMP_Free
+
+function inputs: 	1) BMPImage* image: the image to be freed
+
+function purpose: frees the bmp image
+
+function return: nothing
+
+********************************************************************/
 void BMP_Free(BMPImage* image) {
 	//free image if image is true
   if(image!=NULL)
@@ -143,7 +192,20 @@ void BMP_Free(BMPImage* image) {
 }
 
 
-//*************PIXEL*MANIPULATION**************
+//****************************************PIXEL*MANIPULATION*****************************************
+
+/********************************************************************
+
+function name: copyData
+
+function inputs: 	1) BMPImage* inImage: the original image
+									2) BMPImage* outImage: the image to be made into a copy
+
+function purpose: copys the image from input into output
+
+function return: nothing
+
+********************************************************************/
 void copyData(BMPImage* inImage, BMPImage* outImage){
 	int i;
 	for(i = 0; i< 3 *(inImage->header).height * (inImage->header).width; i++){
@@ -152,6 +214,18 @@ void copyData(BMPImage* inImage, BMPImage* outImage){
 }
 
 
+/********************************************************************
+
+function name: randPixel
+
+function inputs: 	1) BMPImage* image: the image file
+									2) unsigned char* pixels: the array of pixels that have been edited
+
+function purpose: finds a random pixel that has not previously been chose
+
+function return: a random pixel
+
+********************************************************************/
 unsigned int randPixel(BMPImage* image, unsigned char* pixels){ //return a random pixel
 	unsigned int index;
 	int tries = 0;
@@ -171,6 +245,19 @@ unsigned int randPixel(BMPImage* image, unsigned char* pixels){ //return a rando
 	}
 }
 
+/********************************************************************
+
+function name: readPixel
+
+function inputs: 	1) BMPImage* image: the image file to be read from
+									2) unsigned int read: the pixel index to be read
+									3) unsigned char* out: the character that was read
+
+function purpose: reads the character encoded in the given pixel
+
+function return: the character that was read fromt the pixel
+
+********************************************************************/
 unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char* out){ //read in the pixel
 	unsigned char temp = 0;
 	unsigned char mask = 0x07;
@@ -185,6 +272,19 @@ unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char* out){
 	return(temp);//return read status (1: read, 0: didn't read)
 }
 
+/********************************************************************
+
+function name: writePixel
+
+function inputs: 	1) unsigned char inChar: the character to write to the file
+									2) unsigned int read: the pixel index that will be written to
+									3) BMPImage* outImage: the image file
+
+function purpose: writes the given character into the given pixel
+
+function return: nothing
+
+********************************************************************/
 void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
 	int i;
 	unsigned char red = 0;
@@ -199,7 +299,21 @@ void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //
 	outImage->data[read+2] += blue;
 }
 
-void getSections(unsigned char inChar, unsigned char* red, unsigned char* green, unsigned char* blue){
+/********************************************************************
+
+function name: getSections
+
+function inputs: 	1) unsigned char inChar: the input character to be split up
+									2) unsigned char* red: the red section
+									3) unsigned char* green: the green section
+									4) unsigned char* blue: the blue section
+
+function purpose: splits up the input character into three sections
+
+function return: nothing
+
+********************************************************************/
+static void getSections(unsigned char inChar, unsigned char* red, unsigned char* green, unsigned char* blue){
 	unsigned char mask = 0xc0;
 	(*red) = mask & inChar; //get 2 most significant bits
 	(*red) >>= 6;//move to least significant

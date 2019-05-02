@@ -6,6 +6,22 @@ static void printHelp();
 static void printSecurity();
 static void printUse();
 
+/********************************************************************
+
+function name: checkInput
+
+function inputs: 	1) int argc: the number of input elements
+									2) char** argv: the array of input strings
+
+function purpose: checks for valid input and prints the desired statement
+
+function return: the state the program should go to
+									-1) bad input: EXIT_FAILURE
+									0) good input, print string: EXIT_SUCCESS
+									1) good input: decode
+									2) good input: encode
+
+********************************************************************/
 int checkInput(int argc, char** argv){
 	if(argc == 2){
 		if(checkString(argv[1], "--help", 6)){
@@ -38,14 +54,27 @@ int checkInput(int argc, char** argv){
 	}
 }
 
+/********************************************************************
+
+function name: checkString
+
+function inputs: 	1) char* input: the string to be tested
+									2) char* check: the string to be tested against
+									3) int length: the length of the input string
+
+function purpose: checks if two strings are equivalent
+
+function return: bool of if they are equal
+
+********************************************************************/
 static int checkString(char* input, char* check, int length){
 	int i = 0;
 	//char help[6] = "--help";
 	while(input[i] != 0){
-		if(i < length){
+		if(input[i] != check[i]){
+			return(0);
+		}else if(i< length){
 			i++;
-		}else if(input[i] != check[i]){
-			return(0);	
 		}else{
 			return(0);
 		}
@@ -56,6 +85,17 @@ static int checkString(char* input, char* check, int length){
 	return(1);
 }
 
+/********************************************************************
+
+function name: printHelp
+
+function inputs: 	1)none
+
+function purpose: prints the help message
+
+function return: none
+
+********************************************************************/
 static void printHelp(){
 	printf("usage \"./steg $(input image) $(mode) $(message file) $(output image)\"\n\n");
 
@@ -73,6 +113,17 @@ static void printHelp(){
 	printf("\tkey can be used to terminate input.\n\n");
 }
 
+/********************************************************************
+
+function name: printSecurity
+
+function inputs: 	1) none
+
+function purpose: print the security statement
+
+function return: nothing
+
+********************************************************************/
 static void printSecurity(){
 	printf("\tThis program is not intended to be uncrackable.  It is meant to hide the\n");
 	printf("\tmessage from attackers, not to protect it.  The ultimate goal is to hide\n");
@@ -83,6 +134,17 @@ static void printSecurity(){
 	printf("\tprogram as it has most likely been modified and is not safe.\n\n");
 }
 
+/********************************************************************
+
+function name: printUse
+
+function inputs: 	1) none
+
+function purpose: prints the use statement
+
+function return: nothing
+
+********************************************************************/
 static void printUse(){
 	printf("    unknown input, use \"./steg --help\" for propper use\n");
 }

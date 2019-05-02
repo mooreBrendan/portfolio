@@ -10,9 +10,10 @@ int main(int argc, char** argv){
 	}
 
 	unsigned int seed = promptPassword();
-	printf("seed: %d\n", seed);
+	//printf("seed: %d\n", seed);
 	srand(seed);
-	
+	seed = 0;
+
 	//run program
 	if(state == 1){//read from message
 		decode(argv[1], argv[3]);
