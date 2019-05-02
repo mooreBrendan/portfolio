@@ -165,7 +165,7 @@ unsigned int randPixel(BMPImage* image, unsigned char* pixels){ //return a rando
 	return(tries != ATTEMPT_LIMIT ? index: 0); //return the index if the attempts did not run out
 }
 
-unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char out){ //read in the pixel
+unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char* out){ //read in the pixel
 	unsigned char temp = 0;
 	unsigned char mask = 0x07;
 	*out = 0;

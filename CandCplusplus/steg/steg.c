@@ -1,8 +1,9 @@
 #include "main.h"
 
+/*
 static unsigned char convertFromChar(unsigned char);
-
 static unsigned char convertToChar(unsigned char);
+*/
 
 void decode(char* inPic, char* outMess){
 	BMPImage* fIN = BMP_Open(inPic);
@@ -16,9 +17,23 @@ void decode(char* inPic, char* outMess){
 		BMP_Free(fIN);
 		return;
 	}
+	
+	unsigned char* pixels = malloc(sizeof(char) * fIN->header.imagesize);
+	if(pixels == NULL){
+		fclose(fOUT);
+		BMP_Free(fIN);
+		return;
+	}
+	int i;
+	for(i =0; i< fIN->header.imagesize;i++){
+		pixels[i] = 0;
+	}
 	unsigned char temp;
+	unsigned int index;
+	unsigned char readNum;
 	do{
-		temp = readPixel(fIN, randPixel(fIN));
+		index = randPixel(fIN, pixels);
+		readNum = readPixel(fIN, index*3, &temp);
 		if(temp != 0){
 			fprintf(fOUT, "%c", temp);
 		}
@@ -74,7 +89,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 		index = randPixel(imageOut, pixels);
 		if(index != 0){
 			pixels[index] = 1;
-			writePixel(temp, index, imageOut);
+			writePixel(temp, index*3, imageOut);
 		}else{
 			printf("could not write\n");
 			fseek(fMESS, 0, SEEK_END);
@@ -87,7 +102,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 	free(pixels);
 }
 
-static unsigned char convertFromChar(unsigned char in){
+/*static unsigned char convertFromChar(unsigned char in){
 	char out;
 	if(in >= 32 ){
 		if(in <91){
@@ -112,4 +127,4 @@ static unsigned char convertToChar(unsigned char in){
 		out = in + 31;
 	}
 	return(out);
-}
+}*/
