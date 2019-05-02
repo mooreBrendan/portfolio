@@ -38,6 +38,7 @@ void decode(char* inPic, char* outMess){
 			fprintf(fOUT, "%c", temp);
 		}
 	}while(temp != 0);
+	free(pixels);
 	BMP_Free(fIN);
 	fclose(fOUT);
 }
