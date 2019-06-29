@@ -21,11 +21,21 @@ int calculate(FILE** fp, long int* returnVal){
 		store = 0;
 		temp = ' ';
 		if(!fscanf(*fp, "%ld", &calc)){
-			return(-1);
+			fscanf(*fp, "%c",&temp);
+			if(temp != '('){
+				return(-1);
+			}else{
+				if(calculate(fp, &store)==-1){
+					return(-1);
+				}else{
+					*returnVal += store;
+				}
+			}
+		}else{
+			do{
+				fscanf(*fp, "%c", &temp);
+			}while(!feof(*fp) && temp == ' ');
 		}
-		do{
-			fscanf(*fp, "%c", &temp);
-		}while(!feof(*fp) && temp == ' ');
 		if(temp != '\n' && !feof(*fp)){
 			if(temp == '+'){
 				*returnVal += calc;
