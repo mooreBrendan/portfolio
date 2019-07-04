@@ -61,3 +61,4 @@ test8: $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET) output?.txt output??.txt valgrind?.log
+	clear
