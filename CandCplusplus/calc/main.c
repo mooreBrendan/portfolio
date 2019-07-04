@@ -50,6 +50,8 @@ long int calculate(FILE** fp, long int* finalVal){
 			temp = 0;
 			if( fscanf(*fp,"%c",&temp) == 1 && temp == '('){ //check if open par.
 				state = calculate(fp, &calc1); //get operator and operand
+			}else if(temp == '\n'){
+				return(0);
 			}else if(temp != ' '){ //if not par
 				return(-1); //return error
 			}
@@ -63,6 +65,9 @@ long int calculate(FILE** fp, long int* finalVal){
 		if(temp == '('){
 			state = calculate(fp, &calc2);
 			calc1 *= calc2;
+		}else if(temp == '\n'){
+			*finalVal = calc1;
+			return(0);
 		}else{
 			state = conv(temp);
 		}
@@ -90,10 +95,10 @@ int main(int argc, char** argv){
 	FILE* fp = fopen(argv[1], "r");
 	
 	long int calc = 0;
-	if(calculate(&fp, &calc) == -1){
-		printf("INVALID FORMAT\n");
-	}else{
+	if(calculate(&fp, &calc) == 0){
 		printf("%ld\n",calc);
+	}else{
+		printf("INVALID FORMAT\n");
 	}
 	fclose(fp);
 	return(EXIT_SUCCESS);
