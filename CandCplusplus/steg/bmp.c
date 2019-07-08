@@ -286,17 +286,19 @@ function return: nothing
 
 ********************************************************************/
 void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
-	int i;
-	unsigned char red = 0;
-	unsigned char green = 0;
-	unsigned char blue = 0;
+	//int i;
+	unsigned char red, green, blue = 0;
+	//unsigned char green = 0;
+	//unsigned char blue = 0;
 	getSections(inChar, &red, &green, &blue);
-	for(i = 0; i< 3;i++){
-		outImage->data[read + i] -= (outImage->data[read + i]) % 8;//remove last 3 bits
-	}
-	outImage->data[read] += red; //add in each section
-	outImage->data[read+1] += green;
-	outImage->data[read+2] += blue;
+	
+	outImage->data[read] += red - (outImage-> data[read] % 8);
+	outImage->data[read + 1] += green - (outImage-> data[read + 1] % 8);
+	outImage->data[read + 2] += blue - (outImage-> data[read + 2] % 8);
+	
+	//outImage->data[read] += red; //add in each section
+	//outImage->data[read + 1] += green;
+	//outImage->data[read + 2] += blue;
 }
 
 /********************************************************************
@@ -314,15 +316,15 @@ function return: nothing
 
 ********************************************************************/
 static void getSections(unsigned char inChar, unsigned char* red, unsigned char* green, unsigned char* blue){
-	unsigned char mask = 0xc0;
-	(*red) = mask & inChar; //get 2 most significant bits
+	//unsigned char mask = 0xc0;
+	(*red) = 0xc0 & inChar; //get 2 most significant bits
 	(*red) >>= 6;//move to least significant
 	(*red) |= 0x04; //move parity to position
 
-	mask = 0x38; //get 3 middle bits
-	(*green) = mask & inChar; //copy bits
+	//mask = 0x38; //get 3 middle bits
+	(*green) = 0x38 & inChar; //copy bits
 	(*green) >>= 3; //move to least significan
 
-	mask = 0x07; //get 3 least significant
-	(*blue) = mask & inChar; //copy bits
+	//mask = 0x07; //get 3 least significant
+	(*blue) = 0x07 & inChar; //copy bits
 }

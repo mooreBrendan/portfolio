@@ -50,6 +50,10 @@ long int calculate(FILE** fp, long int* finalVal){
 			temp = 0;
 			if( fscanf(*fp,"%c",&temp) == 1 && temp == '('){ //check if open par.
 				state = calculate(fp, &calc1); //get operator and operand
+				if(state <=0){
+					*finalVal = calc1;
+					return(state);
+				}
 			}else if(temp == '\n'){
 				return(0);
 			}else if(temp != ' '){ //if not par
@@ -68,6 +72,19 @@ long int calculate(FILE** fp, long int* finalVal){
 		}else if(temp == '\n'){
 			*finalVal = calc1;
 			return(0);
+		}else if(temp == ')'){
+			*finalVal = calc1;
+			fscanf(*fp, "%c", &temp);
+			if(temp == '\n'){
+				return(0);
+			}else if(temp == ')'){
+				return(1);
+			}else if(temp == '('){
+				fseek(*fp,-1,SEEK_CUR);
+				return(3);
+			}
+			state = conv(temp);
+			return(state);
 		}else{
 			state = conv(temp);
 		}
@@ -80,6 +97,7 @@ long int calculate(FILE** fp, long int* finalVal){
 	
 		//perform operation
 		calc1 = calc(calc1, state, calc2);
+		state = returnVal;
 	}while(returnVal >0);
 
 	*finalVal = calc1;
@@ -93,7 +111,9 @@ int main(int argc, char** argv){
 		return(EXIT_FAILURE);
 	}
 	FILE* fp = fopen(argv[1], "r");
-	
+	if(fp == NULL){
+		return(EXIT_FAILURE);	
+	}
 	long int calc = 0;
 	if(calculate(&fp, &calc) == 0){
 		printf("%ld\n",calc);
