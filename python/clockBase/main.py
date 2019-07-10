@@ -1,11 +1,19 @@
-import clock
-import segParse
 import time
 
+import clock
+import printer
+
+#define constants
+printDelay = .001
+
+#initialize variable
 base = 2
 
+#create objects
 clk = clock.clock(base)
+prntr = printer.printer(printDelay,"c")
 
+#run the clock
 try:
 	while 1 == 1:
 		clk.update(base)

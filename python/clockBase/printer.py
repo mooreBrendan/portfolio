@@ -1,8 +1,12 @@
 import time
 
-class segParser:
-	def __init__(self):
+class printer:
+	def __init__(self, delay, segType):
 		self.delay = .001
+		if(segType = 'a' or segType == 'A'):
+			segType = 'a'
+		else:
+			self.type = 'c'
 		self.dict = {
 			'0' : "11111100",
 			'1' : "01100000",
@@ -21,10 +25,14 @@ class segParser:
 			'e' : "10011110",
 			'f' : "10001110"
 		}
-	def parse(self,string):
+	def parse(self,clock):
 		#disable output display
-		for i in string:
-			self.write(self.conv(i))
+		for i in range(6):
+			self.write(self.conv(clock.baseHour[i]))
+			self.write(self.conv(clock.baseMin[i]))
+			self.write(self.conv(clock.baseSec[i]))
+			#clock low
+			#clock high
 		#enable output display
 
 	def conv(self,char):
@@ -32,10 +40,17 @@ class segParser:
 		return(self.dict[char])
 
 	def write(self,segments):
-		#clock low
 		#output the bits
 		for seg in segments:
 			#write each bit
-			time.delay(self.delay)
-		#clock high (write)
+			if(segType == 'c'):
+				if(seg ==  '1'):
+					x = 1
+				else:
+					x = 0
+			else:
+				if(seg == '1'):
+					x = 0
+				else:
+					x = 1
 		
