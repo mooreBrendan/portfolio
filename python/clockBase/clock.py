@@ -3,6 +3,24 @@ import time
 class clock():
 	def __init__(self,base):
 		base = int(base)
+		self.dict = {
+			0 : "0",
+			1 : "1",
+			2 : "2",
+			3 : "3",
+			4 : "4",
+			5 : "5",
+			6 : "6",
+			7 : "7",
+			8 : "8",
+			9 : "9",
+			10 : "a",
+			11 : "b",
+			12 : "c",
+			13 : "d",
+			14 : "e",
+			15 : "f"
+		}
 		if(base < 2):
 			self.base = 2
 		elif(base >16):
@@ -19,11 +37,11 @@ class clock():
 		self.baseMin = ""
 		self.baseSec = ""
 		while self.hour >0:
-			self.baseHour = str(self.hour % self.base) + self.baseHour
+			self.baseHour = self.dict[self.hour % self.base] + self.baseHour
 			self.hour = int((self.hour - (self.hour % self.base) ) / self.base)
 		while self.min >0:
-			self.baseMin = str(self.min % self.base) + self.baseMin
+			self.baseMin = self.dict[self.min % self.base] + self.baseMin
 			self.min = int((self.min - (self.min % self.base) ) / self.base)
 		while self.sec >0:
-			self.baseSec = str(self.sec % self.base) + self.baseSec
+			self.baseSec = self.dict[self.sec % self.base] + self.baseSec
 			self.sec = int((self.sec - (self.sec % self.base) ) / self.base)
