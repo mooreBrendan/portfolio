@@ -1,7 +1,7 @@
 import clock
 import time
 
-base = 16
+base = 2
 
 clk = clock.clock(base)
 
