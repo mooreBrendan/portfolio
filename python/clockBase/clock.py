@@ -15,15 +15,15 @@ class clock():
 		self.sec = time.localtime().tm_sec
 		self.base = base
 	def convert(self):
-		self.baseHour = []
-		self.baseMin = []
-		self.baseSec = []
+		self.baseHour = ""
+		self.baseMin = ""
+		self.baseSec = ""
 		while self.hour >0:
-			self.baseHour.prepend(self.hour %base)
-			self.hour = (self.hour - (self.hour %base))/base
+			self.baseHour = str(self.hour % self.base) + self.baseHour
+			self.hour = int((self.hour - (self.hour % self.base) ) / self.base)
 		while self.min >0:
-			self.baseMin.prepepend(self.min %base)
-			self.min = (self.min - (self.min %base))/base
+			self.baseMin = str(self.min % self.base) + self.baseMin
+			self.min = int((self.min - (self.min % self.base) ) / self.base)
 		while self.sec >0:
-			self.baseSec.prepend(self.sec %base)
-			self.sec = (self.sec - (self.sec %base))/base
+			self.baseSec = str(self.sec % self.base) + self.baseSec
+			self.sec = int((self.sec - (self.sec % self.base) ) / self.base)
