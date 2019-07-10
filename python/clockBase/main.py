@@ -1,4 +1,5 @@
 import clock
+import segParse
 import time
 
 base = 2
