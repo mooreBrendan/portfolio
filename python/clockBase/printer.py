@@ -2,12 +2,12 @@ import time
 
 class printer:
 	def __init__(self, delay, segType):
-		self.delay = .001
-		if(segType = 'a' or segType == 'A'):
-			segType = 'a'
+		self.__delay = .001
+		if(segType == 'a' or segType == 'A'):
+			self.__type = 'a'
 		else:
-			self.type = 'c'
-		self.dict = {
+			self.__type = 'c'
+		self.__dict = {
 			'0' : "11111100",
 			'1' : "01100000",
 			'2' : "11011010",
@@ -28,22 +28,22 @@ class printer:
 	def parse(self,clock):
 		#disable output display
 		for i in range(6):
-			self.write(self.conv(clock.baseHour[i]))
-			self.write(self.conv(clock.baseMin[i]))
-			self.write(self.conv(clock.baseSec[i]))
+			self.__write(self.__conv(clock.baseHour[i]))
+			self.__write(self.__conv(clock.baseMin[i]))
+			self.__write(self.__conv(clock.baseSec[i]))
 			#clock low
 			#clock high
 		#enable output display
 
-	def conv(self,char):
+	def __conv(self,char):
 		#convert to bits in 7 seg disp
-		return(self.dict[char])
+		return(self.__dict[char])
 
-	def write(self,segments):
+	def __write(self,segments):
 		#output the bits
 		for seg in segments:
 			#write each bit
-			if(segType == 'c'):
+			if(self.__type == 'c'):
 				if(seg ==  '1'):
 					x = 1
 				else:

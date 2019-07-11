@@ -3,7 +3,7 @@ import time
 class clock():
 	def __init__(self,base):
 		base = int(base)
-		self.dict = {
+		self.__dict = {
 			0 : "0",
 			1 : "1",
 			2 : "2",
@@ -22,32 +22,32 @@ class clock():
 			15 : "f"
 		}
 		if(base < 2):
-			self.base = 2
+			self.__base = 2
 		elif(base >16):
-			self.base = 16
+			self.__base = 16
 		else:
-			self.base = base
+			self.__base = base
 	def update(self, base):
 		self.hour = time.localtime().tm_hour
 		self.min = time.localtime().tm_min
 		self.sec = time.localtime().tm_sec
-		self.base = base
+		self.__base = base
 	def convert(self):
 		self.baseHour = ""
 		self.baseMin = ""
 		self.baseSec = ""
 		while self.hour >0:
-			self.baseHour = self.dict[self.hour % self.base] + self.baseHour
-			self.hour = int((self.hour - (self.hour % self.base) ) / self.base)
+			self.baseHour = self.__dict[self.hour % self.__base] + self.baseHour
+			self.hour = int((self.hour - (self.hour % self.__base) ) / self.__base)
 		while len(self.baseHour) < 5:
 			self.baseHour = "0" + self.baseHour
 		while self.min >0:
-			self.baseMin = self.dict[self.min % self.base] + self.baseMin
-			self.min = int((self.min - (self.min % self.base) ) / self.base)
+			self.baseMin = self.__dict[self.min % self.__base] + self.baseMin
+			self.min = int((self.min - (self.min % self.__base) ) / self.__base)
 		while len(self.baseMin) < 6:
 			self.baseMin = "0" + self.baseMin
 		while self.sec >0:
-			self.baseSec = self.dict[self.sec % self.base] + self.baseSec
-			self.sec = int((self.sec - (self.sec % self.base) ) / self.base)
+			self.baseSec = self.__dict[self.sec % self.__base] + self.baseSec
+			self.sec = int((self.sec - (self.sec % self.__base) ) / self.__base)
 		while len(self.baseSec) < 6:
 			self.baseSec = "0" + self.baseSec
