@@ -67,22 +67,32 @@ long int calculate(FILE** fp, long int* finalVal){
 			fscanf(*fp, "%c",&temp); 
 		}while(temp == ' ');
 		if(temp == '('){
+			//handle "a()"
 			state = calculate(fp, &calc2);
 			calc1 *= calc2;
 		}else if(temp == '\n'){
+			//handle "a\n" end of file
 			*finalVal = calc1;
 			return(0);
 		}else if(temp == ')'){
 			*finalVal = calc1;
+			if(fscanf(*fp, "%ld", &calc2) == 1){
+				//handle "()a" case
+				calc(calc1, 3, calc2);
+			}
 			fscanf(*fp, "%c", &temp);
 			if(temp == '\n'){
+				//handle "()\n" end of file
 				return(0);
 			}else if(temp == ')'){
+				//handle "(())"
 				return(1);
 			}else if(temp == '('){
+				//handle "()()"
 				fseek(*fp,-1,SEEK_CUR);
 				return(3);
 			}
+			//handle "()+-*/"
 			state = conv(temp);
 			return(state);
 		}else{
