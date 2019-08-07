@@ -4,10 +4,11 @@ from time import sleep
 
 config = configparser.ConfigParser()
 config.read('config.ini')
-print(config[0])
-print(config[1])
+print(config['credentials']['user'])
+print(config['credentials']['client_id'])
+print(config['credentials']['oauth_token'])
 
-client = twitch.TwitchClient(client_id = config.client_id)
+client = twitch.TwitchClient(client_id = config['credentials']['client_id'])
 channel = client.channels.get_by_id(44322889)
 
 print(channel.id)
