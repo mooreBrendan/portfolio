@@ -1,12 +1,18 @@
-import config
-from twitch import TwitchClient
+import configparser
+import twitch
+from time import sleep
 
-print(config.client_id)
-print(config.oauth_token)
+config = configparser.ConfigParser()
+config.read('config.ini')
+print(config[0])
+print(config[1])
 
-client = TwitchClient(client_id = config.client_id)
+client = twitch.TwitchClient(client_id = config.client_id)
 channel = client.channels.get_by_id(44322889)
 
 print(channel.id)
 print(channel.name)
 print(channel.display_name)
+
+while true:
+	sleep(1)
