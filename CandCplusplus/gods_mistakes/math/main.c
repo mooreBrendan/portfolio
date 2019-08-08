@@ -6,17 +6,19 @@ long int raise(long int base, long int power){
 }
 
 long int add(long int x, long int y){
-	return(y == 0? x: (y > 0 ? add(x, y - 1) + 1: add(x, y+1) - 1));
+	return(y == 0? x: (y > 0 ? add(x, y - 1) + 1: add(x, y + 1) - 1));
 }
 
 long int sub(long int x, long int y){
-	return(y == 0? x: (y > 0 ? sub(x, y - 1) - 1: sub(x, y+1) + 1));
+	return(y == 0? x: (y > 0 ? sub(x, y - 1) - 1: sub(x, y + 1) + 1));
 }
+
+long int abv(long int x){
+	return(x >= 0? x: -1 * x);
+}
+
 long int mul(long int x, long int y){
-	if( y == 0){
-		return(x);
-	}
-	return(mul(x,y-1) + x);
+	return(y == 0? 0: (y > 0 ? mul(x, y - 1) + x: (x < 0? mul(x, y + 1) - x : -1 * (abv(mul(x, y + 1)) + x))));
 }
 
 int main(int argc, char** argv){
