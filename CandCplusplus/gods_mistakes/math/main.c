@@ -1,8 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-long int raise(long int base, long int power){
-	return( power > 0 ? (power > 1 ?  (raise(base, power/2)) * raise(base, power/2) * ((power % 2) ? base: 1): base) : 1);
+
+long int mod(long int modulo, long int base){
+	return(modulo - (modulo / base) * base);
+}
+
+long int abv(long int x){
+	return(x >= 0? x: -1 * x);
 }
 
 long int add(long int x, long int y){
@@ -13,14 +18,15 @@ long int sub(long int x, long int y){
 	return(y == 0? x: (y > 0 ? sub(x, y - 1) - 1: sub(x, y + 1) + 1));
 }
 
-long int abv(long int x){
-	return(x >= 0? x: -1 * x);
-}
-
 long int mul(long int x, long int y){
-	return(y == 0? 0: (y > 0 ? mul(x, y - 1) + x: (x < 0? mul(x, y + 1) - x : -1 * (abv(mul(x, y + 1)) + x))));
+	return(y == 0? 0: (y > 0 ? add(mul(x, sub(y, 1)), x): (x < 0? sub(mul(x, add(y, 1)), x) : -1 * add(abv(mul(x, add(y, 1))), x))));
 }
 
+long int raise(long int base, long int power){
+	return( power > 0 ? (power > 1 ?  (raise(base, power/2)) * raise(base, power/2) * ((mod(power, 2)) ? base: 1): base) : 1);
+}
+
+//***************************************main*************************************************
 int main(int argc, char** argv){
 	if(argc < 4){
 		return(EXIT_FAILURE);
