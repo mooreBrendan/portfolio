@@ -16,7 +16,7 @@ prntr = printer.printer(printDelay,"c")
 #run the clock
 try:
 	while 1 == 1:
-		clk.update(base)
+		clk.updateTime(base)
 		print("10:\t"+ str(clk.hour)+":"+str(clk.min)+":"+str(clk.sec))
 		clk.convert()
 		print(str(base) +":\t"+ str(clk.baseHour)+":"+str(clk.baseMin)+":"+str(clk.baseSec))

@@ -1,4 +1,5 @@
 import time
+import GPIO
 
 class clock():
 	def __init__(self,base):
@@ -21,18 +22,55 @@ class clock():
 			14 : "e",
 			15 : "f"
 		}
+		self.__reg ={
+			"base0":"17",
+			"hour3":"16",
+			"hour2":"15",
+			"hour1":"14",
+			"hour0":"13",
+			"min_5":"12",
+			"min_4":"10",
+			"min_3":"9",
+			"min_2":"8",
+			"min_1":"7",
+			"min_0":"6",
+			"sec_5":"5",
+			"sec_4":"4",
+			"sec_3":"3",
+			"sec_2":"2",
+			"sec_1":"1",
+			"sec_0":"0"
+		}
 		if(base < 2):
 			self.__base = 2
 		elif(base >16):
 			self.__base = 16
 		else:
 			self.__base = base
-	def update(self, base):
+
+#run the clock
+	def runClock():
+		updateTime()
+		readBase()
+		convert()
+		updateRegs()
+
+#parse dip switch
+	def __readBase(self):
+		self.__base = 0
+		for i in self.__basePins
+			self.__base = 2 * self.__base
+			if(GPIO.read(i)):
+				self.__base = self.__base + 1
+
+#update clock values
+	def __updateTime(self):
 		self.hour = time.localtime().tm_hour
 		self.min = time.localtime().tm_min
 		self.sec = time.localtime().tm_sec
-		self.__base = base
-	def convert(self):
+
+#convert to base
+		def __convert(self):
 		self.baseHour = ""
 		self.baseMin = ""
 		self.baseSec = ""
@@ -51,3 +89,20 @@ class clock():
 			self.sec = int((self.sec - (self.sec % self.__base) ) / self.__base)
 		while len(self.baseSec) < 6:
 			self.baseSec = "0" + self.baseSec
+
+#update registers
+	def __updateRegs(self):
+		if(self.__prevSec != self.baseSec):
+			self.__updateSec()
+			if(self.__prevMin != self.baseMin):
+					self.__updateMin()
+
+
+#**********************************************
+#update second registers
+	def __updateSec(self);
+		os.sleep(1)
+
+#update minute registers
+	def __updateMin(self);
+		os.sleep(1)
