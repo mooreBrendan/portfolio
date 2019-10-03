@@ -6,8 +6,6 @@ import printer
 #define constants
 printDelay = .001
 
-#initialize variable
-base = 16
 
 #create objects
 clk = clock.clock(base)
