@@ -29,15 +29,24 @@ class clock():
 	#update base
 	def updateBase(self,base):
 		self.__base = base
+	
+	def updateSec(self,secVal):
+		self.sec = secVal
+	
+	def updateMin(self,minVal):
+		self.min = minVal
+	
+	def updateHour(self,hourVal):
+		self.hour = hourVal
 
 	#update clock values
-	def __updateTime(self):
-		self.hour = time.localtime().tm_hour
-		self.min = time.localtime().tm_min
-		self.sec = time.localtime().tm_sec
+	def updateTime(self):
+		self.updateHour( time.localtime().tm_hour)
+		self.updateMin( time.localtime().tm_min)
+		self.updateSec( time.localtime().tm_sec)
 
 	#convert to base
-	def __convert(self):
+	def convert(self):
 		if(self.sec != self.__prevSec):
 			self.baseHour = ""
 			self.baseMin = ""
@@ -48,17 +57,23 @@ class clock():
 			while self.tempSec >0:
 				self.baseSec = self.__dict[self.tempSec % self.__base] + self.baseSec
 				self.tempSec = int((self.tempSec - (self.tempSec % self.__base) ) / self.__base)
+			if self.baseSec == "":
+				self.baseSec = "0"
 			while len(self.baseSec) < 6:
-				self.baseSec = "0" + self.baseSec
+				self.baseSec = " " + self.baseSec
 			if(self.min != self.__prevMin):
 				while self.tempMin >0:
 					self.baseMin = self.__dict[self.tempMin % self.__base] + self.baseMin
 					self.tempMin = int((self.tempMin - (self.tempMin % self.__base) ) / self.__base)
+				if self.baseMin == "":
+					self.baseMin = "0"
 				while len(self.baseMin) < 6:
 					self.baseMin = "0" + self.baseMin
 				if(self.hour != self.__prevHour):
 					while self.tempHour >0:
 						self.baseHour = self.__dict[self.tempHour % self.__base] + self.baseHour
 						self.tempHour = int((self.tempHour - (self.tempHour % self.__base) ) / self.__base)
+						if self.baseHour == "":
+							self.baseHour = "0"
 					while len(self.baseHour) < 4:
 						self.baseHour = "0" + self.baseHour

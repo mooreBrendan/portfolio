@@ -1,3 +1,8 @@
+#https://realpython.com/intro-to-python-threading/
+#https://www.programiz.com/python-programming/time/sleep
+#https://learn.sparkfun.com/tutorials/raspberry-gpio/all
+
+import threading
 import time
 import RPI.GPIO as GPIO
 
@@ -5,7 +10,7 @@ class dipSwitch:
 	def __init__(self,switch):	
 		#set up switch for clock base
 		self.__pins = []
-		if(type(switch) == list &&len(switch) == 4):
+		if(type(switch) == list and len(switch) == 4):
 			self.__pins.append(self.__setUpPin(9,switch[0],GPIO.IN))
 			self.__pins.append(self.__setUpPin(10,switch[1],GPIO.IN))
 			self.__pins.append(self.__setUpPin(11,switch[2],GPIO.IN))
@@ -141,7 +146,13 @@ class printer:
 			'd' : "01111010",
 			'e' : "10011110",
 			'f' : "10001110",
-			' ' : "00000000"
+			' ' : "00000000",
+			10  : "11101110",
+			11  : "00111110",
+			12  : "10011100",
+			13  : "01111010",
+			14  : "10011110",
+			15  : "10001110"
 		}
 
 		#initialize base
@@ -185,28 +196,28 @@ class printer:
 	def __updateSec(self,second);
 		for i in range(len(second)):
 			if (self.__prevSec[i] != second[i]):
-				self.__write(self.__regs("sec_"+str(i),second[i])
+				self.write(self.__regs("sec_"+str(i),second[i])
 
 	#update minute registers
 	def __updateMin(self,minute);
 		for i in range(len(minute)):
 			if (self.__prevMin[i] != minute[i]):
-				self.__write(self.__regs("min_"+str(i),minute[i])
+				self.write(self.__regs("min_"+str(i),minute[i])
 
 	#update hour registers
 	def __updateHour(self,hour):
 		for i in range(len(hour)):
 			if (self.__prevHour[i] != hour[i]):
-				self.__write(self.__regs("hour"+str(i),hour[i])
+				self.write(self.__regs("hour"+str(i),hour[i])
 
 	#update base register
 	def __updateBase(self,base):
 		if (self.__prevBase != base):
-			self.__write(self.__regs("base0",base)
+			self.write(self.__regs("base0",base)
 
 
 	#output values
-	def __write(self,register,character):
+	def write(self,register,character):
 		#write selection
 		select = self.__regs[register]
 #		self.__writeSel(select)
