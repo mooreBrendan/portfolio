@@ -4,8 +4,10 @@
 
 import threading
 import time
-import RPI.GPIO as GPIO
+import RPi.GPIO as GPIO
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 class dipSwitch:
 	def __init__(self,switch):	
 		#set up switch for clock base
@@ -25,17 +27,17 @@ class dipSwitch:
 	def __setUpPin(self,default,pin,mode):
 		try:
 			pin = int(pin)
-			GPIO.setMode(pin,mode)
+			GPIO.setup(pin,mode)
 			return(pin)
 		except:
-			GPIO.setMode(default,mode)
+			GPIO.setup(default,mode)
 			return(default)
 	
 	#parse dip switch
 	def readBase(self):
 		self.__prevBase = self.__base
 		self.__base = 0
-		for i in self.__pins
+		for i in self.__pins:
 			self.__base = 2 * self.__base
 			if(GPIO.input(i)):
 				self.__base = self.__base + 1
@@ -47,7 +49,7 @@ class dipSwitch:
 
 class printer:
 	def __init__(self, delay, segType,clk,bus,select):
-		GPIO.setmode(GPIO.BCM)
+#		GPIO.setmode(GPIO.BCM)
 		
 		#set up clock pin
 		if(type(clk) == int):
@@ -80,25 +82,25 @@ class printer:
 		#set up selection pins
 		self.__select = []
 		if(type(select) == list and len(select) == 9):
-			self.__select.append(self.__setUpPin(13,select[0],GPOI.OUT))
-			self.__select.append(self.__setUpPin(14,select[1],GPOI.OUT))
-			self.__select.append(self.__setUpPin(15,select[2],GPOI.OUT))
-			self.__select.append(self.__setUpPin(16,select[3],GPOI.OUT))
-			self.__select.append(self.__setUpPin(17,select[4],GPOI.OUT))
-			self.__select.append(self.__setUpPin(18,select[5],GPOI.OUT))
-			self.__select.append(self.__setUpPin(19,select[6],GPOI.OUT))
-			self.__select.append(self.__setUpPin(20,select[7],GPOI.OUT))
-			self.__select.append(self.__setUpPin(21,select[8],GPOI.OUT))
+			self.__select.append(self.__setUpPin(13,select[0],GPIO.OUT))
+			self.__select.append(self.__setUpPin(14,select[1],GPIO.OUT))
+			self.__select.append(self.__setUpPin(15,select[2],GPIO.OUT))
+			self.__select.append(self.__setUpPin(16,select[3],GPIO.OUT))
+			self.__select.append(self.__setUpPin(17,select[4],GPIO.OUT))
+			self.__select.append(self.__setUpPin(18,select[5],GPIO.OUT))
+			self.__select.append(self.__setUpPin(19,select[6],GPIO.OUT))
+			self.__select.append(self.__setUpPin(20,select[7],GPIO.OUT))
+			self.__select.append(self.__setUpPin(21,select[8],GPIO.OUT))
 		else:
-			self.__select.append(self.__setUpPin(13,13,GPOI.OUT))
-			self.__select.append(self.__setUpPin(14,14,GPOI.OUT))
-			self.__select.append(self.__setUpPin(15,15,GPOI.OUT))
-			self.__select.append(self.__setUpPin(16,16,GPOI.OUT))
-			self.__select.append(self.__setUpPin(17,17,GPOI.OUT))
-			self.__select.append(self.__setUpPin(18,18,GPOI.OUT))
-			self.__select.append(self.__setUpPin(19,19,GPOI.OUT))
-			self.__select.append(self.__setUpPin(20,20,GPOI.OUT))
-			self.__select.append(self.__setUpPin(21,21,GPOI.OUT))
+			self.__select.append(self.__setUpPin(13,13,GPIO.OUT))
+			self.__select.append(self.__setUpPin(14,14,GPIO.OUT))
+			self.__select.append(self.__setUpPin(15,15,GPIO.OUT))
+			self.__select.append(self.__setUpPin(16,16,GPIO.OUT))
+			self.__select.append(self.__setUpPin(17,17,GPIO.OUT))
+			self.__select.append(self.__setUpPin(18,18,GPIO.OUT))
+			self.__select.append(self.__setUpPin(19,19,GPIO.OUT))
+			self.__select.append(self.__setUpPin(20,20,GPIO.OUT))
+			self.__select.append(self.__setUpPin(21,21,GPIO.OUT))
 
 		#set up seven segment mode
 		self.__delay = delay
@@ -147,6 +149,16 @@ class printer:
 			'e' : "10011110",
 			'f' : "10001110",
 			' ' : "00000000",
+			0   : "11111100",
+			1   : "01100000",
+			2   : "11011010",
+			3   : "11110010",
+			4   : "01100110",
+			5   : "10110110",
+			6   : "10111110",
+			7   : "11100000",
+			8   : "11111110",
+			9   : "11100110",
 			10  : "11101110",
 			11  : "00111110",
 			12  : "10011100",
@@ -166,63 +178,66 @@ class printer:
 	def __setUpPin(self,default,pin,mode):
 		try:
 			pin = int(pin)
-			GPIO.setMode(pin,mode)
+			GPIO.setup(pin,mode)
 			return(pin)
 		except:
-			GPIO.setMode(default,mode)
+			GPIO.setup(default,mode)
 			return(default)
 
 
 	#update registers
 	def updateRegs(self,clk):
 		if(self.__prevBase != clk.base):
-			self.__updateSec(clk.baseSec)
-			self.__updateMin(clk.baseMin)
-			self.__updateHour(clk.baseHour)
-			self.__updateBase(clk.base)
+			self.updateSec(clk.baseSec)
+			self.updateMin(clk.baseMin)
+			self.updateHour(clk.baseHour)
+			self.updateBase(clk.base)
 		else:
 			if(self.__prevSec != clk.baseSec):
-				self.__updateSec(clk.baseSec)
+				self.updateSec(clk.baseSec)
 				if(self.__prevMin != clk.baseMin):
-					self.__updateMin(clk.baseMin)
+					self.updateMin(clk.baseMin)
 					if(self.__prevHour != clk.baseHour):
-						self.__updateHour(clk.baseHour)
+						self.updateHour(clk.baseHour)
 		self.__prevBase = clk.base
 		self.__prevSec = clk.baseSec
 		self.__prevMin = clk.baseMin
 		self.__prevHour = clk.baseHour
 
 	#update second registers
-	def __updateSec(self,second);
+	def updateSec(self,second):
 		for i in range(len(second)):
 			if (self.__prevSec[i] != second[i]):
-				self.write(self.__regs("sec_"+str(i),second[i])
+				self.write(self.__regs("sec_"+str(i),second[i]))
 
 	#update minute registers
-	def __updateMin(self,minute);
+	def updateMin(self, minute):
 		for i in range(len(minute)):
 			if (self.__prevMin[i] != minute[i]):
-				self.write(self.__regs("min_"+str(i),minute[i])
+				self.write(self.__regs("min_"+str(i),minute[i]))
 
 	#update hour registers
-	def __updateHour(self,hour):
+	def updateHour(self,hour):
 		for i in range(len(hour)):
 			if (self.__prevHour[i] != hour[i]):
-				self.write(self.__regs("hour"+str(i),hour[i])
+				self.write(self.__regs("hour"+str(i),hour[i]))
 
 	#update base register
-	def __updateBase(self,base):
+	def updateBase(self,base):
 		if (self.__prevBase != base):
-			self.write(self.__regs("base0",base)
+			self.write(self.__regs("base0",base))
 
 
 	#output values
 	def write(self,register,character):
 		#write selection
-		select = self.__regs[register]
+		try:
+			select = self.__regs[register]
+		except:
+			return(-1)
 #		self.__writeSel(select)
-		x = threading.Thread(target=self.__writeSel,args = (select))
-		threads.append(x)
+		x = threading.Thread(target=self.__writeSel,args = (select,))
+#		threads.append(x)
 		x.start()
 
 		#write to bus
@@ -231,28 +246,29 @@ class printer:
 
 		x.join()
 		#run clock for update	
-		GPIO.OUTPUT(self.__clock,GPIO.HIGH)
+		GPIO.output(self.__clk,GPIO.HIGH)
 		time.sleep(self.__delay)
-		GPIO.OUTPUT(self.__clock,GPIO.LOW)
+		GPIO.output(self.__clk,GPIO.LOW)
 		time.sleep(self.__delay)
+		return(0)
 
-	def __writeSel(select):
-		for i in range(len(select)):
-			if(select[i] ==  '1'):
-				GPIO.OUTPUT(self.__select[i],GPIO.HIGH)
+	def __writeSel(self,sel):
+		for i in range(len(sel)):
+			if(sel[i] ==  '1'):
+				GPIO.output(self.__select[i],GPIO.HIGH)
 			else:
-				GPIO.OUTPUT(self.__select[i],GPIO.LOW)
+				GPIO.output(self.__select[i],GPIO.LOW)
 
 
-	def __writeBus(segments):
+	def __writeBus(self,segments):
 		for i in range(len(segments)):
 			if(self.__type == 'c'):
 				if(segments[i] ==  '1'):
-					GPIO.OUTPUT(self.__bus[i],GPIO.HIGH)
+					GPIO.output(self.__bus[i],GPIO.HIGH)
 				else:
-					GPIO.OUTPUT(self.__bus[i],GPIO.LOW)
+					GPIO.output(self.__bus[i],GPIO.LOW)
 			else:
 				if(segments[i] == '1'):
-					GPIO.OUTPUT(self.__bus[i],GPIO.LOW)
+					GPIO.output(self.__bus[i],GPIO.LOW)
 				else:
-					GPIO.OUTPUT(self.__bus[i],GPIO.HIGH)
+					GPIO.output(self.__bus[i],GPIO.HIGH)

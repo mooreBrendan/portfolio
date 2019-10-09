@@ -7,12 +7,15 @@ def test(clock,dip,printer):
 
 	#load register (individual reg test)
 	if code == "ldrV":
-		reg = instruction[5:9]
-		value = int(instruction[10:])
+		reg = instruction[5:10]
+		value = int(instruction[11:])
 		if value > 15 or value < 0:
 			print("bad instruction, value")
 			return(-1)
-		printer.write(reg,value)
+		ret = printer.write(reg,value)
+		if(ret == -1):
+			print("bad register, value")
+			return(-1)
 
 	#update clock's second value
 	elif code == "clkS":
@@ -41,7 +44,7 @@ def test(clock,dip,printer):
 	#update clock's base value (doesn't update conversion)
 	elif code == "clkB":
 		value = int(instruction[5:])
-		if value > 15 or value < 0:
+		if value > 15 or value < 2:
 			print("bad instruction, value")
 			return(-2)
 		clock.updateBase(value)
@@ -50,6 +53,12 @@ def test(clock,dip,printer):
 	elif code == "clkC":
 		clock.convert()
 		printer.updateRegs(clock)
+
+	#get clock value
+	elif code == "clkR":
+		value = ""
+		clock.updateTime()
+		print(clock.hour,":",clock.min,":",clock.sec)
 
 	#read the dip switch
 	elif code == "read":

@@ -1,5 +1,6 @@
 #https://docs.python.org/3/tutorial/errors.html
 
+import sys
 import time
 
 import clock
@@ -21,10 +22,11 @@ dipSwitch = hardware.dipSwitch(switchPins)
 printer = hardware.printer(printDelay,"c",clkPin,busPins,selectionPins)
 
 #run the clock
-try:
+#try:
+if 1==1:
 	while 1 == 1:
-		if test:
-			retCode = debug.test()
+		if len(sys.argv) > 1 and sys.argv[1] == "-d" :
+			retCode = debug.test(clk,dipSwitch,printer)
 			if(retCode == -3):
 				test = False
 			if(retCode == -4):
@@ -37,5 +39,6 @@ try:
 #			print(str(base) +":\t"+ str(clk.baseHour)+":"+str(clk.baseMin)+":"+str(clk.baseSec))
 			printer.updateRegs(clk)
 #			time.sleep(1)
-except:
+#except:
+else:
 	print("exiting")

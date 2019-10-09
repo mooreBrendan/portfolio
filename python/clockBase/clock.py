@@ -41,7 +41,7 @@ class clock():
 
 	#update clock values
 	def updateTime(self):
-		self.updateHour( time.localtime().tm_hour)
+		self.updateHour( time.localtime().tm_hour%12)
 		self.updateMin( time.localtime().tm_min)
 		self.updateSec( time.localtime().tm_sec)
 
