@@ -1,9 +1,23 @@
 class test:
-	def __init__(self,clock,dip,printer):
+	def __init__(self,clock,dip,printer,verbose):
 		self.clock = clock
 		self.dip = dip
 		self.printer = printer
 		self.__number = 0
+		self.__dict = {
+			"ldrV":self.__ldrV,
+			"clkS":self.__clkS,
+			"clkM":self.__clkM,
+			"clkH":self.__clkH,
+			"clkB":self.__clkB,
+			"clkC":self.__clkC,
+			"clkR":self.__clkR,
+			"read":self.__read,
+			"list":self.__list,
+			"exit":self.__exit,
+			"stop":self.__stop
+		}
+		self.__verbose = verbose
 	def run(self):
 		instruction = input(str(self.__number) + ": ")
 		self.__number = self.__number + 1
@@ -13,31 +27,14 @@ class test:
 		if(len(code) <= 3):
 			print("bad instruction, code")
 			retVal = -1
-		if code == "ldrV":
-			retVal = self.__ldrV(string)
-		elif code == "clkS":
-			retVal = self.__clkS(string)
-		elif code == "clkM":
-			retVal = self.__clkM(string)
-		elif code == "clkH":
-			retVal = self.__clkH(string)
-		elif code == "clkB":
-			retVal = self.__clkB(string)
-		elif code == "clkC":
-			retVal = self.__clkC(string)
-		elif code == "clkR":
-			retVal = self.__clkR(string)
-		elif code == "read":
-			retVal = self.__read(string)
-		elif code == "exit":
-			retVal = self.__exit(string)
-		elif code == "stop":
-			retVal = self.__stop(string)
-		#unknown code
 		else:
-			print("bad instruction, code")
-			retVal = -1
-		print("\"",instruction,"\"","code:",code," value:",string)
+			try:
+				retVal = self.__dict[code](string)
+			except:
+				print("bad instruction, code")
+				retVal = -1
+		if self.__verbose:
+			print("\"",instruction,"\"","code:",code," value:",string)
 		return(retVal)
 
 	def __ldrV(self,string):
@@ -99,7 +96,7 @@ class test:
 	def __clkR(self,string):
 		value = ""
 		self.clock.updateTime()
-		print(self.__clock.hour,":",self.__clock.min,":",self.__clock.sec)
+		print(self.clock.hour,":",self.clock.min,":",self.clock.sec)
 		return(1)
 
 	#read the dip switch
@@ -110,7 +107,7 @@ class test:
 
 	#exit debug
 	def __exit(self,string):
-		print("running")
+		print("exiting debugger")
 		return(-3)
 
 	#stop program execution
@@ -124,4 +121,9 @@ class test:
 			temp = int(string)
 		except:
 			temp = -1
-		return(temp)	
+		return(temp)
+
+	def __list(self,string):
+		for i in self.__dict.keys():
+			print(i)
+		return(1)
