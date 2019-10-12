@@ -1,3 +1,6 @@
+#https://stackoverflow.com/questions/16819222/how-to-return-dictionary-keys-as-a-list-in-python
+#https://softwareengineering.stackexchange.com/questions/182093/why-store-a-function-inside-a-python-dictionary/182095
+
 class test:
 	def __init__(self,clock,dip,printer,verbose):
 		self.clock = clock
