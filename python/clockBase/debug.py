@@ -1,5 +1,5 @@
 def test(clock,dip,printer):
-	instruction = input()
+	instruction = input(">>")
 	code = instruction[0:4]
 	if(len(code) <= 3):
 		print("bad instruction, code")

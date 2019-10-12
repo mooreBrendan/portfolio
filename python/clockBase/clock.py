@@ -38,6 +38,9 @@ class clock():
 	
 	def updateHour(self,hourVal):
 		self.hour = hourVal
+	
+	def giveBase(self):
+		return(self.__base)
 
 	#update clock values
 	def updateTime(self):

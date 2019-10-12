@@ -24,21 +24,20 @@ printer = hardware.printer(printDelay,"c",clkPin,busPins,selectionPins)
 #run the clock
 #try:
 if 1==1:
-	while 1 == 1:
-		if len(sys.argv) > 1 and sys.argv[1] == "-d" :
+	if len(sys.argv) > 1 and sys.argv[1] == "-d" :
+		retCode = 0
+		while retCode != -3:
 			retCode = debug.test(clk,dipSwitch,printer)
-			if(retCode == -3):
-				test = False
 			if(retCode == -4):
 				raise Exception('terminate')
-		else:
-			clk.updateBase(dipSwitch.readBase())
-			clk.updateTime()
-#			print("10:\t"+ str(clk.hour)+":"+str(clk.min)+":"+str(clk.sec))
-			clk.convert()
-#			print(str(base) +":\t"+ str(clk.baseHour)+":"+str(clk.baseMin)+":"+str(clk.baseSec))
-			printer.updateRegs(clk)
-#			time.sleep(1)
+	while 1 == 1:
+		clk.updateBase(dipSwitch.readBase())
+		clk.updateTime()
+#		print("10:\t"+ str(clk.hour)+":"+str(clk.min)+":"+str(clk.sec))
+		clk.convert()
+#		print(str(base) +":\t"+ str(clk.baseHour)+":"+str(clk.baseMin)+":"+str(clk.baseSec))
+		printer.updateRegs(clk)
+#		time.sleep(1)
 #except:
 else:
 	print("exiting")
