@@ -8,7 +8,6 @@ import hardware
 import debug
 
 #define constants
-test = True
 printDelay = .001
 clkPin = 0
 busPins = []
@@ -25,9 +24,10 @@ printer = hardware.printer(printDelay,"c",clkPin,busPins,selectionPins)
 #try:
 if 1==1:
 	if len(sys.argv) > 1 and sys.argv[1] == "-d" :
+		test = debug.test(clk,dipSwitch,printer)
 		retCode = 0
 		while retCode != -3:
-			retCode = debug.test(clk,dipSwitch,printer)
+			retCode = test.run()
 			if(retCode == -4):
 				raise Exception('terminate')
 	while 1 == 1:
