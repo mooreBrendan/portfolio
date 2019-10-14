@@ -39,8 +39,10 @@ class dipSwitch:
 			self.__base = 2 * self.__base
 			if(GPIO.input(i)):
 				self.__base = self.__base + 1
-		if(self.__base < 2):
+		if(self.__base == 0):
 			self.__base = 2
+		else:
+			self.__base = self.__base +1
 		return(self.__base)
 
 class selector:
