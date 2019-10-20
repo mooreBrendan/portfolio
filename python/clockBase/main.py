@@ -17,7 +17,7 @@ selectionPins =[]
 
 #create objects
 clk = clock.clock()
-dipSwitch = hardware.dipSwitch(switchPins)
+dipSwitch = hardware.dipSwitch(switchPins,logic = 1)
 printer = hardware.printer(printDelay,"c",clkPin,busPins,selectionPins)
 
 #run the clock

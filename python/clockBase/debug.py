@@ -18,9 +18,11 @@ class test:
 			"read":self.__read,
 			"list":self.__list,
 			"exit":self.__exit,
-			"stop":self.__stop
+			"stop":self.__stop,
+			"selR":self.__selR
 		}
 		self.__verbose = verbose
+
 	def run(self):
 		instruction = input(str(self.__number) + ": ")
 		self.__number = self.__number + 1
@@ -130,3 +132,6 @@ class test:
 		for i in self.__dict.keys():
 			print(i)
 		return(1)
+	
+	def __selR(self,string):
+		return(self.printer.writeSel(string))

@@ -10,9 +10,13 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 class dipSwitch:
-	def __init__(self,switch):
-		self.__default = [9,10,11,12]
-	
+	def __init__(self,switch,logic = 0):
+		self.__default = [2,3,4,17]
+		if logic == 0:
+			self.high = GPIO.HIGH
+		else:
+			self.high = GPIO.LOW
+		
 		#set up switch for clock base
 		self.__pins = []
 		if(type(switch) == list and len(switch) == 4):
@@ -21,6 +25,18 @@ class dipSwitch:
 		else:
 			for i in range(len(self.__default)):
 				self.__pins.append(self.__setUpPin(self.__default[i],self.__default[i]))
+	def printPins(self):
+		for i in self.__pins:
+			print(i)
+
+	def printRead(self):
+		temp = ""
+		for i in self.__pins:
+			if(GPIO.input(i) == self.high):
+				temp = temp + "1"
+			else:
+				temp = temp + "0"
+		print(temp)
 
 	#setup pin
 	def __setUpPin(self,default,pin):
@@ -36,8 +52,8 @@ class dipSwitch:
 	def readBase(self):
 		self.__base = 0
 		for i in self.__pins:
-			self.__base = 2 * self.__base
-			if(GPIO.input(i)):
+			self.__base = self.__base << 1
+			if(GPIO.input(i) == self.high):
 				self.__base = self.__base + 1
 		if(self.__base == 0):
 			self.__base = 2
@@ -95,8 +111,8 @@ class printer:
 #		GPIO.setmode(GPIO.BCM)
 		
 		#default pins	
-		self.__busDef =[1,2,3,4,5,6,7,8]
-		self.__selDef =[13,14,15,16,17,18,19,20,21]
+		self.__busDef =[27,22,10,9,11,0,5,6]
+		self.__selDef =[13,19,26,14,15,18,23,24,25]
 		
 		#set up clock pin
 		if(type(clk) == int):
@@ -131,23 +147,24 @@ class printer:
 		
 		#set up dictionary for selection of registers
 		self.__regs ={
-			"base0":"300",
-			"hour3":"200",
-			"hour2":"100",
-			"hour1":"070",
-			"hour0":"060",
-			"min_5":"050",
-			"min_4":"040",
-			"min_3":"030",
-			"min_2":"020",
-			"min_1":"010",
-			"min_0":"007",
+			"base0":"500",
+			"hour3":"400",
+			"hour2":"300",
+			"hour1":"200",
+			"hour0":"100",
+			"min_5":"060",
+			"min_4":"050",
+			"min_3":"040",
+			"min_2":"030",
+			"min_1":"020",
+			"min_0":"010",
 			"sec_5":"006",
 			"sec_4":"005",
 			"sec_3":"004",
 			"sec_2":"003",
 			"sec_1":"002",
-			"sec_0":"001"
+			"sec_0":"001",
+			"desel":"000"
 		}
 
 		#set up dictionary for seven segment output
@@ -258,11 +275,9 @@ class printer:
 
 
 		#write selection
-		try:
-			select = self.__regs[register]
-		except:
+		if(self.writeSel(select) == -1):
+			x.join
 			return(-1)
-		self.__writeSel(select)
 		
 
 		x.join()
@@ -273,10 +288,15 @@ class printer:
 		time.sleep(self.__delay)
 		return(0)
 
-	def __writeSel(self,sel):
-		self.__highSel.write(sel[0])
-		self.__midSel.write(sel[1])
-		self.__lowSel.write(sel[2])
+	def writeSel(self,sel):
+		try:
+			select = self.__regs[sel]
+		except:
+			return(-1)
+		self.__highSel.write(select[0])
+		self.__midSel.write(select[1])
+		self.__lowSel.write(select[2])
+		return(0)
 
 	def __writeBus(self,segments):
 		for i in range(len(segments)):
