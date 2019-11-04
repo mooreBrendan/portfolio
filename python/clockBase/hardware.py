@@ -10,21 +10,17 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
 class dipSwitch:
-	def __init__(self,switch,logic = 0):
+	def __init__(self,logicHigh = 0):
 		self.__default = [2,3,4,17]
-		if logic == 0:
+		if logicHigh == 0:
 			self.high = GPIO.HIGH
 		else:
 			self.high = GPIO.LOW
 		
 		#set up switch for clock base
 		self.__pins = []
-		if(type(switch) == list and len(switch) == 4):
-			for i in range(len(self.__default)):
-				self.__pins.append(self.__setUpPin(self.__default[i],switch[i]))
-		else:
-			for i in range(len(self.__default)):
-				self.__pins.append(self.__setUpPin(self.__default[i],self.__default[i]))
+		for i in range(len(self.__default)):
+			self.__pins.append(self.__setUpPin(self.__default[i]))
 
 	def printPins(self):
 		print("dip: ",self.__pins)
@@ -39,14 +35,13 @@ class dipSwitch:
 		print(temp)
 
 	#setup pin
-	def __setUpPin(self,default,pin):
+	def __setUpPin(self,pin):
 		try:
 			pin = int(pin)
 			GPIO.setup(pin,GPIO.IN)
 			return(pin)
 		except:
-			GPIO.setup(default,GPIO.IN)
-			return(default)
+			return(-1)
 
 	#parse dip switch
 	def readBase(self):
@@ -62,17 +57,12 @@ class dipSwitch:
 		return(self.__base)
 
 class selector:
-	def __init__(self,default,pins):
+	def __init__(self,default):
 		#set up selection pins
 		self.__pins = []
-		if(type(pins) == list and len(pins) == 3):
-			self.__pins.append(self.__setUpPin(default[0],pins[0]))
-			self.__pins.append(self.__setUpPin(default[1],pins[1]))
-			self.__pins.append(self.__setUpPin(default[2],pins[2]))
-		else:
-			self.__pins.append(self.__setUpPin(default[0],default[0]))
-			self.__pins.append(self.__setUpPin(default[1],default[1]))
-			self.__pins.append(self.__setUpPin(default[2],default[2]))
+		self.__pins.append(self.__setUpPin(default[0]))
+		self.__pins.append(self.__setUpPin(default[1]))
+		self.__pins.append(self.__setUpPin(default[2]))
 		
 		self.__select = {
 			"0":"000",
@@ -88,14 +78,13 @@ class selector:
 		return(self.__pins)
 	
 	#setup pin
-	def __setUpPin(self,default,pin):
+	def __setUpPin(self,pin):
 		try:
 			pin = int(pin)
 			GPIO.setup(pin,GPIO.OUT)
 			return(pin)
 		except:
-			GPIO.setup(default,GPIO.OUT)
-			return(default)
+			return(-1)
 		
 	def write(self,char):
 		try:
@@ -109,37 +98,25 @@ class selector:
 				GPIO.output(self.__pins[i],GPIO.LOW)
 
 class printer:
-	def __init__(self, delay, segType,clk,bus,select):
+	def __init__(self, delay, segType):
 #		GPIO.setmode(GPIO.BCM)
 		
 		#default pins	
 		self.__busDef =[27,22,10,9,11,0,5,6]
 		self.__selDef =[13,19,26,14,15,18,23,24,25]
-		self.__clkDef =8 
+		self.__clkDef = 8 
 		
 		#set up clock pin
-		if(type(clk) == int):
-			self.__clk = self.__setUpPin(self.__clkDef,clk,GPIO.OUT)
-		else:
-			self.__clk = self.__setUpPin(self.__clkDef,self.__clkDef,GPIO.OUT)
+		self.__clk = self.__setUpPin(self.__clkDef)
 
 		#set up bus
 		self.__bus = []
-		if(type(bus) == list and len(bus) == 8):
-			for i in range(len(self.__busDef)):
-				self.__bus.append( self.__setUpPin(self.__busDef[i],bus[i],GPIO.OUT))
-		else:
-			for i in range(len(self.__busDef)):
-				self.__bus.append( self.__setUpPin(self.__busDef[i],self.__busDef[i],GPIO.OUT))
+		for i in range(len(self.__busDef)):
+			self.__bus.append( self.__setUpPin(self.__busDef[i]))
 
-		if(type(select) == list and len(select) == 9):
-			self.__highSel = selector(self.__selDef[0:3],select[0:2])
-			self.__midSel = selector(self.__selDef[3:6],select[3:5])
-			self.__lowSel = selector(self.__selDef[6:9],select[6:8])
-		else:
-			self.__highSel = selector(self.__selDef[0:3],self.__selDef[0:3])
-			self.__midSel = selector(self.__selDef[3:6],self.__selDef[3:6])
-			self.__lowSel = selector(self.__selDef[6:9],self.__selDef[6:9])
+		self.__highSel = selector(self.__selDef[0:3])
+		self.__midSel = selector(self.__selDef[3:6])
+		self.__lowSel = selector(self.__selDef[6:9])
 
 		#set up seven segment mode
 		self.__delay = delay
@@ -222,14 +199,13 @@ class printer:
 		print("clk: ",self.__clk)
 
 	#setup pin
-	def __setUpPin(self,default,pin,mode):
+	def __setUpPin(self,pin):
 		try:
 			pin = int(pin)
-			GPIO.setup(pin,mode)
+			GPIO.setup(pin,GPIO.OUT)
 			return(pin)
 		except:
-			GPIO.setup(default,mode)
-			return(default)
+			return(-1)
 
 
 	#update registers
@@ -280,21 +256,17 @@ class printer:
 		#write to bus
 		x = threading.Thread(target=self.__writeBus,args = (self.__dict[character],))
 		x.start()
-	#	segments = self.__dict[character]
-	#	self.__writeBus(segments)
-
 
 		#write selection
-		if(self.writeSel(select) == -1):
+		if(self.writeSel(register) == -1):
 			x.join
 			return(-1)
-		
 
 		x.join()
 		#run clock for update	
-		clkLow()
+		self.clkLow()
 		time.sleep(self.__delay)
-		clkHigh()
+		self.clkHigh()
 		time.sleep(self.__delay)
 		return(0)
 

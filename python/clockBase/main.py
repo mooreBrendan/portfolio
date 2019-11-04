@@ -9,16 +9,12 @@ import debug
 
 #define constants
 printDelay = .001
-clkPin = -1
-busPins = []
-switchPins = []
-selectionPins =[]
 
 
 #create objects
 clk = clock.clock()
-dipSwitch = hardware.dipSwitch(switchPins,logic = 1)
-printer = hardware.printer(printDelay,"c",clkPin,busPins,selectionPins)
+dipSwitch = hardware.dipSwitch(1)
+printer = hardware.printer(printDelay,'c') 
 
 #run the clock
 try:
