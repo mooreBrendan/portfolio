@@ -25,10 +25,10 @@ class dipSwitch:
 		else:
 			for i in range(len(self.__default)):
 				self.__pins.append(self.__setUpPin(self.__default[i],self.__default[i]))
-	def printPins(self):
-		for i in self.__pins:
-			print(i)
 
+	def printPins(self):
+		print("dip: ",self.__pins)
+	
 	def printRead(self):
 		temp = ""
 		for i in self.__pins:
@@ -84,7 +84,9 @@ class selector:
 			"6":"110",
 			"7":"111"
 		}
-
+	def printPins(self):
+		return(self.__pins)
+	
 	#setup pin
 	def __setUpPin(self,default,pin):
 		try:
@@ -113,12 +115,13 @@ class printer:
 		#default pins	
 		self.__busDef =[27,22,10,9,11,0,5,6]
 		self.__selDef =[13,19,26,14,15,18,23,24,25]
+		self.__clkDef =8 
 		
 		#set up clock pin
 		if(type(clk) == int):
-			self.__clk = self.__setUpPin(0,clk,GPIO.OUT)
+			self.__clk = self.__setUpPin(self.__clkDef,clk,GPIO.OUT)
 		else:
-			self.__clk = self.__setUpPin(0,0,GPIO.OUT)
+			self.__clk = self.__setUpPin(self.__clkDef,self.__clkDef,GPIO.OUT)
 
 		#set up bus
 		self.__bus = []
@@ -211,6 +214,13 @@ class printer:
 		self.__prevHour = ""
 		self.__base = ""
 
+	def printPins(self):
+		print("bus: ",self.__bus)
+		print("high: ",list(self.__highSel.printPins()))
+		print("mid: ",list(self.__midSel.printPins()))
+		print("low: ",list(self.__lowSel.printPins()))
+		print("clk: ",self.__clk)
+
 	#setup pin
 	def __setUpPin(self,default,pin,mode):
 		try:
@@ -282,11 +292,17 @@ class printer:
 
 		x.join()
 		#run clock for update	
-		GPIO.output(self.__clk,GPIO.HIGH)
+		clkLow()
 		time.sleep(self.__delay)
-		GPIO.output(self.__clk,GPIO.LOW)
+		clkHigh()
 		time.sleep(self.__delay)
 		return(0)
+
+	def clkHigh(self):
+		GPIO.output(self.__clk,GPIO.HIGH)
+	
+	def clkLow(self):	
+		GPIO.output(self.__clk,GPIO.LOW)
 
 	def writeSel(self,sel):
 		try:

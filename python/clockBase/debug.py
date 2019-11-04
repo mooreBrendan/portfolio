@@ -19,9 +19,14 @@ class test:
 			"list":self.__list,
 			"exit":self.__exit,
 			"stop":self.__stop,
-			"selR":self.__selR
+			"selR":self.__selR,
+			"enSR":self.__enSR,
+			"rPin":self.__rPin
 		}
 		self.__verbose = verbose
+	def __badVal(self):
+		print("bad instruction, value")
+		return(-2)
 
 	def run(self):
 		instruction = input(str(self.__number) + ": ")
@@ -47,20 +52,17 @@ class test:
 		reg = string[0:5]
 		value = self.__toInt(string[5:])
 		if value > 15 or value < 0:
-			print("bad instruction, value")
-			return(-1)
+			return(self.__badVal())
 		ret = self.printer.write(reg,value)
 		if(ret == -1):
-			print("bad register, value")
-			return(-1)
+			return(self.__badVal())
 		return(1)
 
 	#update clock's second value
 	def __clkS(self,string):
 		value = self.__toInt(string[0:])
 		if value > 59 or value < 0:
-			print("bad instruction, value")
-			return(-2)
+			return(self.__badVal())
 		self.clock.updateSec(value)
 		return(1)
 
@@ -68,8 +70,7 @@ class test:
 	def __clkM(self,string):
 		value = self.__toInt(string[0:])
 		if value > 59 or value < 0:
-			print("bad instruction, value")
-			return(-2)
+			return(self.__badVal())
 		self.clock.updateMin(value)
 		return(1)
 
@@ -77,8 +78,7 @@ class test:
 	def __clkH(self,string):
 		value = self.__toInt(instruction[0:])
 		if value > 11 or value < 0:
-			print("bad instruction, value")
-			return(-2)
+			return(self.__badVal())
 		self.clock.updateHour(value)
 		return(1)
 	
@@ -86,8 +86,7 @@ class test:
 	def __clkB(self,string):
 		value = self.__toInt(string[0:])
 		if value > 15 or value < 2:
-			print("bad instruction, value")
-			return(-2)
+			return(self.__badVal())
 		self.clock.updateBase(value)
 		return(1)
 
@@ -99,7 +98,6 @@ class test:
 
 	#get clock value
 	def __clkR(self,string):
-		value = ""
 		self.clock.updateTime()
 		print(self.clock.hour,":",self.clock.min,":",self.clock.sec)
 		return(1)
@@ -135,3 +133,18 @@ class test:
 	
 	def __selR(self,string):
 		return(self.printer.writeSel(string))
+
+	def __enSR(self,string):
+		val = self.__toInt(string[0:])
+		print(val)
+		if(val == 0):
+			self.printer.clkLow()
+		elif(val == 1):
+			self.printer.clkHigh()
+		else:
+			return(self.__badVal())
+		return(1)
+
+	def __rPin(self,string):
+		self.printer.printPins()
+		self.dip.printPins()
