@@ -17,8 +17,8 @@ dipSwitch = hardware.dipSwitch(1)
 printer = hardware.printer(printDelay,'c') 
 
 #run the clock
-try:
-#if 1==1:
+#try:
+if 1==1:
 	if len(sys.argv) > 1 and sys.argv[1] == "-d" :
 		if len(sys.argv) > 2 and sys.argv[2] == "-v":
 			verbose = True
@@ -37,6 +37,6 @@ try:
 		clk.convert()
 		printer.updateRegs(clk)
 #		time.sleep(1)
-except:
-#else:
+#except:
+else:
 	print("\nexiting")

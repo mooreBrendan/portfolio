@@ -71,7 +71,7 @@ class clock():
 				if self.baseMin == "":
 					self.baseMin = "0"
 				while len(self.baseMin) < 6:
-					self.baseMin = "0" + self.baseMin
+					self.baseMin = " " + self.baseMin
 				if(self.hour != self.__prevHour):
 					while self.tempHour >0:
 						self.baseHour = self.__dict[self.tempHour % self.__base] + self.baseHour
@@ -79,4 +79,4 @@ class clock():
 						if self.baseHour == "":
 							self.baseHour = "0"
 					while len(self.baseHour) < 4:
-						self.baseHour = "0" + self.baseHour
+						self.baseHour = " " + self.baseHour

@@ -74,9 +74,6 @@ class selector:
 			"6":"110",
 			"7":"111"
 		}
-	def printPins(self):
-		return(self.__pins)
-	
 	#setup pin
 	def __setUpPin(self,pin):
 		try:
@@ -85,7 +82,12 @@ class selector:
 			return(pin)
 		except:
 			return(-1)
-		
+	
+	#print the current pins
+	def printPins(self):
+		return(self.__pins)
+	
+	#set the selection values
 	def write(self,char):
 		try:
 			sel = self.__select[char]
@@ -99,10 +101,10 @@ class selector:
 
 class printer:
 	def __init__(self, delay, segType):
-#		GPIO.setmode(GPIO.BCM)
 		
 		#default pins	
-		self.__busDef =[27,22,10,9,11,0,5,6]
+		#self.__busDef =[27,22,10,9,11,0,5,6]
+		self.__busDef =[10,9,5,0,11,22,27,6]
 		self.__selDef =[13,19,26,14,15,18,23,24,25]
 		self.__clkDef = 8 
 		
@@ -165,6 +167,7 @@ class printer:
 			'd' : "01111010",
 			'e' : "10011110",
 			'f' : "10001110",
+			'g' : "11110110",
 			' ' : "00000000",
 			0   : "11111100",
 			1   : "01100000",
@@ -181,7 +184,8 @@ class printer:
 			12  : "10011100",
 			13  : "01111010",
 			14  : "10011110",
-			15  : "10001110"
+			15  : "10001110",
+			16	: "11110110"
 		}
 
 		#initialize base
@@ -210,18 +214,18 @@ class printer:
 
 	#update registers
 	def updateRegs(self,clk):
-		if(self.__prevBase != clk.giveBase()):
-			self.updateSec(clk.baseSec)
-			self.updateMin(clk.baseMin)
-			self.updateHour(clk.baseHour)
-			self.updateBase(clk.giveBase())
-		else:
-			if(self.__prevSec != clk.baseSec):
-				self.updateSec(clk.baseSec)
-				if(self.__prevMin != clk.baseMin):
-					self.updateMin(clk.baseMin)
-					if(self.__prevHour != clk.baseHour):
-						self.updateHour(clk.baseHour)
+#		if(self.__prevBase != clk.giveBase()):
+		self.updateSec(clk.baseSec)
+		self.updateMin(clk.baseMin)
+		self.updateHour(clk.baseHour)
+		self.updateBase(clk.giveBase())
+#		else:
+#			if(self.__prevSec != clk.baseSec):
+#				self.updateSec(clk.baseSec)
+#				if(self.__prevMin != clk.baseMin):
+#					self.updateMin(clk.baseMin)
+#					if(self.__prevHour != clk.baseHour):
+#						self.updateHour(clk.baseHour)
 		self.__prevBase = clk.giveBase()
 		self.__prevSec = clk.baseSec
 		self.__prevMin = clk.baseMin
@@ -231,19 +235,19 @@ class printer:
 	def updateSec(self,second):
 		for i in range(len(second)):
 			if (i >= len(self.__prevSec) or i >= len(second)  or self.__prevSec[i] != second[i]):
-				self.write("sec_"+str(i),second[i])
+				self.write("sec_"+str(5-i),second[i])
 
 	#update minute registers
 	def updateMin(self, minute):
 		for i in range(len(minute)):
 			if (i >= len(self.__prevMin) or i >= len(minute)  or self.__prevMin[i] != minute[i]):
-				self.write("min_"+str(i),minute[i])
+				self.write("min_"+str(5-i),minute[i])
 
 	#update hour registers
 	def updateHour(self,hour):
 		for i in range(len(hour)):
 			if (i >= len(self.__prevHour) or i >= len(hour)  or self.__prevHour[i] != hour[i]):
-				self.write("hour"+str(i),hour[i])
+				self.write("hour"+str(3-i),hour[i])
 
 	#update base register
 	def updateBase(self,base):
