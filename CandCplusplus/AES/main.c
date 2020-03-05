@@ -13,7 +13,6 @@ int main(int argc,char** argv){
 		}
 	}*/
 
-/*
 	if(argc < 2){
 		return(EXIT_FAILURE);
 	}
@@ -21,7 +20,7 @@ int main(int argc,char** argv){
 	
 	
 	fclose(fin);
-	*/
+
 	return(EXIT_SUCCESS);
 }
 
