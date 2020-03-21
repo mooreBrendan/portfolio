@@ -40,11 +40,11 @@ class test:
 		#else:
 		try:
 			retVal = self.__dict[commands[0]](commands[1:])
+			if self.__verbose:
+				print("code:",commands[0]," value:",commands[1:])
 		except:
 			print("bad instruction, code")
 			retVal = -1
-		if self.__verbose:
-			print("code:",commands[0]," value:",commands[1:])
 		return(retVal)
 
 	#load register (individual reg test)
