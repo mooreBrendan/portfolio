@@ -16,7 +16,7 @@ winValue = 10
 def diceRoll:
 	dice1 = random(1,6)
 	dice2 = random(1,6)
-	return(dice1 + dice2)
+	return (int(dice1), int(dice2))
 
 
 ############################################
@@ -41,7 +41,7 @@ class Terrains(Enum):
 # Purpose:
 ############################################
 class Player:
-	def __init__(self,token):
+	def __init__(self, identifier, color):
 		self.__cards = []
 		self.__ore = 0
 		self.__brick = 0
@@ -51,7 +51,9 @@ class Player:
 		self.__nodes = []
 		self.__edges = []
 		self.__victoryPoints = 0
-		self.sessionToken = token
+		self.id = identifier
+		self.color = color
+
 	def cullCards(self):
 		if len(self.__cards) > 7:
 			#choose cards to remove
@@ -59,17 +61,33 @@ class Player:
 			numRemoved = 0
 			while numRemoved < needToRemove:
 				#ask cards to remove
-				#cardRemoved = getRemoved()
+				#cardRemoved = self.__getRemoved()
+				cardRemoved = 1
 				self.__cards.remove(1)
 				numRemoved += 1
+
+	def __getRemoved(self):
+		choice = -1
+		while choice == -1:
+			#TODO:
+			#prompt choice
+		return choice
 
 	def buildTrade(self):
 		choice = ""
 		while choice != "end":
 			choice = self.getChoice()
 			if choice == "trade":
+				#TODO:
+				#prompt trade partner
+				#create offer
+				#offer/counter-offer
+				#trade
 				print("trade")
 			elif choice == "build":
+				#TODO:
+				#show options
+				#select and confirm
 				print("build")
 			elif choice != "end":
 				print("Error: choice not recognized")
@@ -77,10 +95,12 @@ class Player:
 	def getChoice(self):
 		choice = "end"
 		##########
+		#TODO:
+		#Move to front-end
 		return choice
 
 	def checkWin(self):
-		return (self.__victoryPoints >= winValue) 
+		return self.__victoryPoints >= winValue
 
 
 ############################################
