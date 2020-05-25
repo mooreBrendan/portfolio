@@ -1,3 +1,5 @@
+#https://python-twitch-client.readthedocs.io/en/latest/v5/users.html
+
 import configparser
 import twitch
 from time import sleep
