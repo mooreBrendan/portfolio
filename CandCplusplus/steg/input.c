@@ -23,31 +23,16 @@ function return: the state the program should go to
 
 ********************************************************************/
 int checkInput(int argc, char** argv){
-	if(argc == 2){
-		if(checkString(argv[1], "--help", 6)){
-			printHelp();
-			return(0);
-		}else if(checkString(argv[1], "--security", 10)){
-			printSecurity();
-			return(0);
-		}else{
-			printUse();
-			return(-1);
-		}
-	}else if(argc == 4 ){ 
-		if(argv[2][0] != '-' || argv[2][1] != 'd'){
-			printUse();
-			return(-1);
-		}else{
-			return(1);
-		}
-	}else if(argc == 5){	
-		if(argv[2][0] != '-' || argv[2][1] != 'e'){
-			printUse();
-			return(-1);
-		}else{
-			return(2);
-		}
+	if(argc == 2 && checkString(argv[1], "--security", 10)){
+		printSecurity();
+		return(0);
+	}else if(argc == 2 && checkString(argv[1], "--help", 6)){
+		printHelp();
+		return(0);
+	}else if(argc == 4 && checkString(argv[2],"-d",2)) {
+		return(1);
+	}else if(argc == 5 && checkString(argv[2],"-e",2)) {	
+		return(2);
 	}else{
 		printUse();
 		return(-1);
@@ -69,20 +54,13 @@ function return: bool of if they are equal
 ********************************************************************/
 static int checkString(char* input, char* check, int length){
 	int i = 0;
-	//char help[6] = "--help";
-	while(input[i] != 0){
+	while(input[i] != 0 && i < length){ //check for null terminator
+		i++;
 		if(input[i] != check[i]){
-			return(0);
-		}else if(i< length){
-			i++;
-		}else{
 			return(0);
 		}
 	}
-	if(i < length){
-		return(0);
-	}
-	return(1);
+	return(i == length);
 }
 
 /********************************************************************
