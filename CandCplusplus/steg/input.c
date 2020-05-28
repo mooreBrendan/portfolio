@@ -22,16 +22,16 @@ function return: the state the program should go to
 									2) good input: encode
 
 ********************************************************************/
-int checkInput(int argc, char** argv){
-	if(argc == 2 && checkString(argv[1], "--security", 10)){
+int checkInput(int argc, char* mode){
+	if(argc == 2 && (checkString(mode, "-s", 2) || checkString(mode, "--security", 10))){
 		printSecurity();
 		return(0);
-	}else if(argc == 2 && checkString(argv[1], "--help", 6)){
+	}else if(argc == 2 && (checkString(mode, "-h", 2) || checkString(mode, "--help", 6))){
 		printHelp();
 		return(0);
-	}else if(argc == 4 && checkString(argv[2],"-d",2)) {
+	}else if(argc == 4 && checkString(mode,"-d",2)) {
 		return(1);
-	}else if(argc == 5 && checkString(argv[2],"-e",2)) {	
+	}else if(argc == 5 && checkString(mode,"-e",2)) {	
 		return(2);
 	}else{
 		printUse();
@@ -75,7 +75,8 @@ function return: none
 
 ********************************************************************/
 static void printHelp(){
-	printf("usage \"./steg $(input image) $(mode) $(message file) $(output image)\"\n\n");
+	printf("usage \"./steg -e $(input image) $(input message file) $(output image)\"\n");
+	printf("usage \"./steg -d $(input image) $(output message file)\"\n\n");
 
 	printf("\tmode:\t-e: encode\n\t\t-d: decode\n\n");
 	printf("\tinput images must be bmp files\n\n");

@@ -46,8 +46,8 @@ val6:	$(TARGET)
 
 
 test1: $(TARGET)
-	./$(TARGET) ./inImages/Rainier.bmp -e ./inText/bible.txt outImage1.bmp
-	./$(TARGET) ./outImage1.bmp -d ./out1.txt
+	./$(TARGET) -e ./inImages/Rainier.bmp ./inText/bible.txt outImage1.bmp
+	./$(TARGET) -d ./outImage1.bmp ./out1.txt
 	diff ./inText/bible.txt ./out1.txt
 
 test2: $(TARGET)
