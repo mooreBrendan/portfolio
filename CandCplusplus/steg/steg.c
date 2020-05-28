@@ -133,7 +133,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 		if(!feof(fMESS)){
 			index = randPixel(imageOut, pixels);
 			if(index != 0){
-				writePixel(temp, index*3, imageOut);
+				writePixel(temp, &(imageOut->data[index*3]));
 			}else{
 				printf("could not find new pixel\n");
 				fseek(fMESS, 0, SEEK_END);
@@ -144,7 +144,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 	//encode the stop character
 	index = randPixel(imageOut, pixels);
 	if(index != 0){
-		writePixel(0, index*3, imageOut);
+		writePixel(0, &(imageOut->data[index*3]));
 	}else{
 		printf("could not find new pixel\n");
 		fseek(fMESS, 0, SEEK_END);

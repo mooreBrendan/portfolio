@@ -46,8 +46,9 @@ val6:	$(TARGET)
 
 
 test1: $(TARGET)
-	./$(TARGET) r8.sp out1.pck
-	diff r8.pck out1.pck
+	./$(TARGET) ./inImages/Rainier.bmp -e ./inText/bible.txt outImage1.bmp
+	./$(TARGET) ./outImage1.bmp -d ./out1.txt
+	diff ./inText/bible.txt ./out1.txt
 
 test2: $(TARGET)
 	./$(TARGET) r100.sp out2.pck

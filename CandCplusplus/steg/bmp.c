@@ -285,20 +285,14 @@ function purpose: writes the given character into the given pixel
 function return: nothing
 
 ********************************************************************/
-void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
-	//int i;
+//void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
+void writePixel(unsigned char inChar, unsigned char* pixelVal){ //write to the pixel
 	unsigned char red, green, blue = 0;
-	//unsigned char green = 0;
-	//unsigned char blue = 0;
 	getSections(inChar, &red, &green, &blue);
 	
-	outImage->data[read] += red - (outImage-> data[read] % 8);
-	outImage->data[read + 1] += green - (outImage-> data[read + 1] % 8);
-	outImage->data[read + 2] += blue - (outImage-> data[read + 2] % 8);
-	
-	//outImage->data[read] += red; //add in each section
-	//outImage->data[read + 1] += green;
-	//outImage->data[read + 2] += blue;
+	pixelVal[0] += red - (pixelVal[0] % 8);
+	pixelVal[1] += green - (pixelVal[1] % 8);
+	pixelVal[2] += blue - (pixelVal[2] % 8);	
 }
 
 /********************************************************************

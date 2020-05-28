@@ -60,6 +60,8 @@ unsigned int randPixel(BMPImage*, unsigned char*);
 
 unsigned char readPixel(BMPImage*, unsigned int, unsigned char*);
 
-void writePixel(unsigned char, unsigned int, BMPImage*);
+
+//void writePixel(unsigned char, unsigned int, BMPImage*);
+void writePixel(unsigned char, unsigned char*);
 
 #endif
