@@ -226,22 +226,22 @@ function purpose: finds a random pixel that has not previously been chose
 function return: a random pixel
 
 ********************************************************************/
-unsigned int randPixel(BMPImage* image, unsigned char* pixels){ //return a random pixel
+long int randPixel(BMPImage* image, unsigned char* pixels){ //return a random pixel
 	unsigned int index;
 	int tries = 0;
 	
 	do{
 		tries++;
-		unsigned int height = rand() % (image ->header).height;
-		unsigned int width = rand() % (image ->header).width;
-		index = height * (image->header).width + width;
+		unsigned int y = rand() % (image ->header).height;
+		unsigned int x = rand() % (image ->header).width;
+		index = y * (image->header).width + x;
 	}while(pixels[index] != 0 && tries != ATTEMPT_LIMIT);
 	
 	if(tries != ATTEMPT_LIMIT){
 		pixels[index] = 1;
 		return(index);	
 	}else{
-		return(0);
+		return(-1);
 	}
 }
 
@@ -258,15 +258,15 @@ function purpose: reads the character encoded in the given pixel
 function return: the character that was read fromt the pixel
 
 ********************************************************************/
-unsigned char readPixel(BMPImage* image, unsigned int read, unsigned char* out){ //read in the pixel
+unsigned char readPixel(unsigned char* pixelVal, unsigned char* out){ //read in the pixel
 	unsigned char temp = 0;
 	unsigned char mask = 0x07;
 	*out = 0;
 	
 	int i;
 	for( i = 2; i >= 0; i--){
-		temp = mask & image->data[read+i]; //get last 3 bits
-		*out |= (temp << ((2-i) *3)); //move parity bit into position
+		temp = mask & pixelVal[i]; //get last 3 bits
+		*out |= (temp << ((2-i) * 3)); //move parity bit into position
 	}
 	temp >>= 2; //get just parity bit
 	return(temp);//return read status (1: read, 0: didn't read)
@@ -285,20 +285,14 @@ function purpose: writes the given character into the given pixel
 function return: nothing
 
 ********************************************************************/
-void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
-	//int i;
+//void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
+void writePixel(unsigned char inChar, unsigned char* pixelVal){ //write to the pixel
 	unsigned char red, green, blue = 0;
-	//unsigned char green = 0;
-	//unsigned char blue = 0;
 	getSections(inChar, &red, &green, &blue);
 	
-	outImage->data[read] += red - (outImage-> data[read] % 8);
-	outImage->data[read + 1] += green - (outImage-> data[read + 1] % 8);
-	outImage->data[read + 2] += blue - (outImage-> data[read + 2] % 8);
-	
-	//outImage->data[read] += red; //add in each section
-	//outImage->data[read + 1] += green;
-	//outImage->data[read + 2] += blue;
+	pixelVal[0] += red - (pixelVal[0] % 8);
+	pixelVal[1] += green - (pixelVal[1] % 8);
+	pixelVal[2] += blue - (pixelVal[2] % 8);	
 }
 
 /********************************************************************

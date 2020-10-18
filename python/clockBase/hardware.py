@@ -251,8 +251,8 @@ class printer:
 
 	#update base register
 	def updateBase(self,base):
-		if (self.__prevBase != base):
-			self.write("base0",base)
+		#if (self.__prevBase != base):
+		self.write("base0",base)
 
 
 	#output values

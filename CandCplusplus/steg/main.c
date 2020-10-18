@@ -2,23 +2,19 @@
 
 int main(int argc, char** argv){
 	//initialize
-	int state = checkInput(argc, argv);
-	if(state == -1){
-		return(EXIT_FAILURE);
-	}else if(state == 0){
+	int mode = checkInput(argc, argv[1]);
+	if(mode == 0){
 		return(EXIT_SUCCESS);
-	}
-
-	unsigned int seed = promptPassword();
-	//printf("seed: %d\n", seed);
-	srand(seed);
-	seed = 0;
-
-	//run program
-	if(state == 1){//read from message
-		decode(argv[1], argv[3]);
-	}else if(state == 2){ //add message
-		encode(argv[1], argv[3], argv[4]);
+	}else if(mode == 1){ //read from message (decode)
+		unsigned int seed = promptPassword(); //get password
+		srand(seed);
+		seed = 0;  //reset seed in memmory
+		decode(argv[2], argv[3]);
+	}else if(mode == 2){ //add message (encode)
+		unsigned int seed = promptPassword(); //get password
+		srand(seed);
+		seed = 0; //reset seed im memmory
+		encode(argv[2], argv[3], argv[4]);
 	}else{
 		return(EXIT_FAILURE);
 	}
