@@ -53,14 +53,13 @@ function return: bool of if they are equal
 
 ********************************************************************/
 static int checkString(char* input, char* check, int length){
-	int i = 0;
-	while(input[i] != 0 && i < length){ //check for null terminator
-		i++;
-		if(input[i] != check[i]){
+	int i;
+	for(i = 0; i < length; i++){
+		if(input[i] == 0 || input[i] != check[i]){
 			return(0);
 		}
 	}
-	return(i == length);
+	return(input[i] == 0);
 }
 
 /********************************************************************
