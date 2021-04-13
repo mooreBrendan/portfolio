@@ -1,6 +1,6 @@
 #include "main.h"
 
-static void getSections(unsigned char, unsigned char*, unsigned char*, unsigned char*);
+static void getSections(unsigned char, unsigned char*);
 
 
 /********************************************************************
@@ -286,19 +286,20 @@ function return: nothing
 
 ********************************************************************/
 void writePixel(unsigned char inChar, unsigned int read, BMPImage* outImage){ //write to the pixel
-	//int i;
-	unsigned char red, green, blue = 0;
-	//unsigned char green = 0;
-	//unsigned char blue = 0;
-	getSections(inChar, &red, &green, &blue);
+	unsigned char pixel[3]={0,0,0};
+	unsigned char mask = 0x07;
+	int i;
+
+	getSections(inChar, pixel);
 	
-	outImage->data[read] += red - (outImage-> data[read] % 8);
-	outImage->data[read + 1] += green - (outImage-> data[read + 1] % 8);
-	outImage->data[read + 2] += blue - (outImage-> data[read + 2] % 8);
-	
-	//outImage->data[read] += red; //add in each section
-	//outImage->data[read + 1] += green;
-	//outImage->data[read + 2] += blue;
+	for(i=0;i<3;i++){
+		outimage->data[read + i] = pixel[i] | (outimage-> data[read + i] & ~mask);
+	}
+	/*
+	outImage->data[read] = pixel[0] | (outImage-> data[read] & ~mask);
+	outimage->data[read + 1] = pixel[1] | (outimage-> data[read + 1] & ~mask);
+	outImage->data[read + 2] = pixel[2] | (outImage-> data[read + 2] & ~mask);
+	*/
 }
 
 /********************************************************************
@@ -315,16 +316,26 @@ function purpose: splits up the input character into three sections
 function return: nothing
 
 ********************************************************************/
-static void getSections(unsigned char inChar, unsigned char* red, unsigned char* green, unsigned char* blue){
-	//unsigned char mask = 0xc0;
-	(*red) = 0xc0 & inChar; //get 2 most significant bits
+static void getSections(unsigned char inChar, unsigned char* pixel){
+	unsigned char mask = 0x07;
+	int i;
+
+	for(i=2:i>=0;i--){
+		pixel[2-i] = (mask << (3*i) & inchar; //get the bits for the section
+		pixel[2-i] >>= (3*i); //bitshift section into lower three bits
+	}
+	pixel[i] |= 0x04; // add the parity bit
+
+	/*
+	(*red) = (mask << 6) & inChar; //get 2 most significant bits
 	(*red) >>= 6;//move to least significant
 	(*red) |= 0x04; //move parity to position
 
 	//mask = 0x38; //get 3 middle bits
-	(*green) = 0x38 & inChar; //copy bits
+	(*green) = ((mask << 3) & inChar); //copy bits
 	(*green) >>= 3; //move to least significan
 
 	//mask = 0x07; //get 3 least significant
-	(*blue) = 0x07 & inChar; //copy bits
+	(*blue) = mask & inChar; //copy bits
+	*/
 }
