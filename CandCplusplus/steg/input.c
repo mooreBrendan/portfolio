@@ -22,32 +22,17 @@ function return: the state the program should go to
 									2) good input: encode
 
 ********************************************************************/
-int checkInput(int argc, char** argv){
-	if(argc == 2){
-		if(checkString(argv[1], "--help", 6)){
-			printHelp();
-			return(0);
-		}else if(checkString(argv[1], "--security", 10)){
-			printSecurity();
-			return(0);
-		}else{
-			printUse();
-			return(-1);
-		}
-	}else if(argc == 4 ){ 
-		if(argv[2][0] != '-' || argv[2][1] != 'd'){
-			printUse();
-			return(-1);
-		}else{
-			return(1);
-		}
-	}else if(argc == 5){	
-		if(argv[2][0] != '-' || argv[2][1] != 'e'){
-			printUse();
-			return(-1);
-		}else{
-			return(2);
-		}
+int checkInput(int argc, char* mode){
+	if(argc == 2 && (checkString(mode, "-s", 2) || checkString(mode, "--security", 10))){
+		printSecurity();
+		return(0);
+	}else if(argc == 2 && (checkString(mode, "-h", 2) || checkString(mode, "--help", 6))){
+		printHelp();
+		return(0);
+	}else if(argc == 4 && checkString(mode,"-d",2)) {
+		return(1);
+	}else if(argc == 5 && checkString(mode,"-e",2)) {	
+		return(2);
 	}else{
 		printUse();
 		return(-1);
@@ -68,21 +53,13 @@ function return: bool of if they are equal
 
 ********************************************************************/
 static int checkString(char* input, char* check, int length){
-	int i = 0;
-	//char help[6] = "--help";
-	while(input[i] != 0){
-		if(input[i] != check[i]){
-			return(0);
-		}else if(i< length){
-			i++;
-		}else{
+	int i;
+	for(i = 0; i < length; i++){
+		if(input[i] == 0 || input[i] != check[i]){
 			return(0);
 		}
 	}
-	if(i < length){
-		return(0);
-	}
-	return(1);
+	return(input[i] == 0);
 }
 
 /********************************************************************
@@ -97,7 +74,8 @@ function return: none
 
 ********************************************************************/
 static void printHelp(){
-	printf("usage \"./steg $(input image) $(mode) $(message file) $(output image)\"\n\n");
+	printf("usage \"./steg -e $(input image) $(input message file) $(output image)\"\n");
+	printf("usage \"./steg -d $(input image) $(output message file)\"\n\n");
 
 	printf("\tmode:\t-e: encode\n\t\t-d: decode\n\n");
 	printf("\tinput images must be bmp files\n\n");

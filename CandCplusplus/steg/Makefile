@@ -22,7 +22,7 @@ $(TARGET): $(OBJS)
 	$(GCC) $(TESTFLAGS) $(OBJS) -o $(TARGET)
 	
 
-testall: test1 test2 test3 test4 test5 test6
+testall: test1 test2 test3
 valall: val1 val2 val3 val4 val5 val6
 
 
@@ -46,16 +46,15 @@ val6:	$(TARGET)
 
 
 test1: $(TARGET)
-	./$(TARGET) r8.sp out1.pck
-	diff r8.pck out1.pck
+	./$(TARGET) -e ./inImages/Rainier.bmp ./inText/bible.txt outImage1.bmp
+	./$(TARGET) -d ./outImage1.bmp ./out1.txt
+	diff ./inText/bible.txt ./out1.txt
 
 test2: $(TARGET)
-	./$(TARGET) r100.sp out2.pck
-	diff out2.pck r100.pck
+	./$(TARGET) --security
 
 test3: $(TARGET)
-	./$(TARGET) r100h.sp out3.pck
-	diff out3.pck r100h.pck
+	./$(TARGET) --help
 
 test4: $(TARGET)
 	./$(TARGET) r100v.sp out4.pck

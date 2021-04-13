@@ -17,6 +17,13 @@ class authenticator:
 			else:
 				self.__respondError()
 
+	def run(self):
+		threads = []
+		while 1 == 1:
+			command = self.__listen(self, portnum)
+			#TODO:
+			#spawn thread and run
+
 if __name__ == "__main__":
 	authServ = authenticator(sys.argv[1], sys.argv[2])
 	print("running")

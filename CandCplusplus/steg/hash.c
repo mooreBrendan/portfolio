@@ -33,13 +33,12 @@ unsigned int promptPassword(){
 	i = 3;
 	while(i < STRING_SIZE+3){
 		pass[i] = getch();
-		//printf("%d ", pass[i]);
-		if(pass[i] == 127){ //backspace
+		if(pass[i] == 127){ //backspace char
 			if(i > 3){
 				pass[i] = i;
 				i--;
 			}
-		}else	if(pass[i] == 10){ //enter
+		}else	if(pass[i] == 10){ //enter char
 			i = STRING_SIZE + 3;
 		}else{ //increment
 			i++;
@@ -48,7 +47,7 @@ unsigned int promptPassword(){
 
 	printf("\n");
 	
-	pass[STRING_SIZE+3] = '\0';//end string
+	pass[STRING_SIZE+3] = '\0';//null terminate string
 
 	//return seed from hash
 	return(passHash(pass, STRING_SIZE));
@@ -68,8 +67,7 @@ function return: the seed from the hashed password
 
 ********************************************************************/
 static unsigned int passHash(char* pass, int size){
-  int i;
-	int j=0;
+  int i, j = 0;
 	unsigned int hash = 0;
 	unsigned int tempI = 0;
 	char tempC = 0;
@@ -102,7 +100,7 @@ function name: getch
 function inputs: 	1) none
 
 function purpose: gets the input characters from the user without showing
-									the password. From Delan Azabani, https://stackoverflow.com/questions/6856635/hide									-password-input-on-terminal)
+									the password. From Delan Azabani, https://stackoverflow.com/questions/6856635/hide-password-input-on-terminal)
 
 function return: the character received
 

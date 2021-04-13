@@ -13,55 +13,55 @@ function purpose: decodes the given image to reveal the hidden message
 function return: nothing
 
 ********************************************************************/
-void decode(char* inPic, char* outMess){
+void decode(char* inFile, char* outMess){
 	//initialize files
-	BMPImage* fIN = BMP_Open(inPic);
-	if(fIN == NULL){
+	BMPImage* inImage = BMP_Open(inFile);
+	if(inImage == NULL){
 		printf("Couldn't open input file\n");
 		return;
 	}
 	FILE* fOUT = fopen(outMess, "w");
 	if(fOUT == NULL){
 		printf("couldn't open output file\n");
-		BMP_Free(fIN);
+		BMP_Free(inImage);
 		return;
 	}
 	
 	//initialize list of pixels
-	unsigned char* pixels = malloc(sizeof(char) * fIN->header.imagesize);
+	unsigned char* pixels = malloc(sizeof(char) * inImage->header.imagesize);
 	if(pixels == NULL){
 		fclose(fOUT);
-		BMP_Free(fIN);
+		BMP_Free(inImage);
 		return;
 	}
 	int i;
-	for(i =0; i< fIN->header.imagesize;i++){
+	for(i =0; i< inImage->header.imagesize;i++){
 		pixels[i] = 0;
 	}
 
 	//read image
-	unsigned char temp;
-	unsigned int index;
+	unsigned char fail;
+	long int index;
 	unsigned char readNum;
 	do{
-		index = randPixel(fIN, pixels);
-		if(index == 0){
+		index = randPixel(inImage, pixels);
+		if(index < 0){
 			printf("failed to find available pixel\n");
-			temp = 0;
+			fail = 0;
 		}else{
-			readNum = readPixel(fIN, index*3, &temp);
+			readNum = readPixel(&inImage->data[index*3], &fail);
 			if(readNum != 1){
 				printf("read invalid pixel\n");
-				temp = 0;
-			}else if(temp != 0){
-				fprintf(fOUT, "%c", temp);
+				fail = 0;
+			}else if(fail != 0){
+				fprintf(fOUT, "%c", fail);
 			}
 		}
-	}while(temp != 0);
+	}while(fail != 0);
 	
 	//cleanup
 	free(pixels);
-	BMP_Free(fIN);
+	BMP_Free(inImage);
 	fclose(fOUT);
 }
 
@@ -127,13 +127,13 @@ void encode(char* inPic, char* inMess, char* outPic){
 
 	//write the pixels
 	unsigned char temp;
-	unsigned int index;
+	long int index;
 	while(!feof(fMESS)){
 		fscanf(fMESS, "%c", &temp);
 		if(!feof(fMESS)){
 			index = randPixel(imageOut, pixels);
-			if(index != 0){
-				writePixel(temp, index*3, imageOut);
+			if(index >= 0){
+				writePixel(temp, &(imageOut->data[index*3]));
 			}else{
 				printf("could not find new pixel\n");
 				fseek(fMESS, 0, SEEK_END);
@@ -144,7 +144,7 @@ void encode(char* inPic, char* inMess, char* outPic){
 	//encode the stop character
 	index = randPixel(imageOut, pixels);
 	if(index != 0){
-		writePixel(0, index*3, imageOut);
+		writePixel(0, &(imageOut->data[index*3]));
 	}else{
 		printf("could not find new pixel\n");
 		fseek(fMESS, 0, SEEK_END);

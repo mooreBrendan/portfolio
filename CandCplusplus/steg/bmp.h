@@ -43,8 +43,6 @@ typedef struct {
 
 BMPImage *BMP_Open(const char *filename);
 
-
-
 //int Is_BMPHeader_Valid(BMPHeader *bmp_hdr, FILE *fptr);
 
 int BMP_Write(const char * outfile, BMPImage *image);
@@ -56,10 +54,10 @@ void BMP_Free(BMPImage *image);
 //**************EXTRA*****************
 void copyData(BMPImage*, BMPImage*);
 
-unsigned int randPixel(BMPImage*, unsigned char*);
+long int randPixel(BMPImage*, unsigned char*);
 
-unsigned char readPixel(BMPImage*, unsigned int, unsigned char*);
+unsigned char readPixel(unsigned char*, unsigned char*);
 
-void writePixel(unsigned char, unsigned int, BMPImage*);
+void writePixel(unsigned char, unsigned char*);
 
 #endif
